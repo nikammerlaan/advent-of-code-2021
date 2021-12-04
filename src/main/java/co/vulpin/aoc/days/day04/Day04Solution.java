@@ -61,31 +61,32 @@ public class Day04Solution extends DaySolution<String> {
         var lines = input.lines()
             .collect(Collectors.toCollection(LinkedList::new));
 
-        var rawCalledNumbers = Arrays.stream(lines.pop().split(","))
+        var calledNumbers = Arrays.stream(lines.pop().split(","))
             .map(Integer::parseInt)
+            .map(Number::new)
             .toList();
 
-        var numbers = rawCalledNumbers.stream()
-            .map(Number::new)
+        var numbers = calledNumbers.stream()
             .collect(Collectors.toMap(Number::value, Function.identity()));
 
-        var calledNumbers = rawCalledNumbers.stream()
-            .map(numbers::get)
-            .toList();
+        var boards = new LinkedList<Board>();
+        while(!lines.isEmpty()) {
+            var rawBoard = new Number[5][5];
 
-        var boards = Arrays.stream(String.join("\n", lines).split("\n\n"))
-            .map(String::trim)
-            .map(rawBoard -> Arrays.stream(rawBoard.split("\n"))
-                .map(s -> Arrays.stream(s.split("\\s+"))
-                    .filter(s0 -> !s0.isBlank())
-                    .map(Integer::parseInt)
-                    .map(numbers::get)
-                    .toArray(Number[]::new)
-                )
-                .toArray(Number[][]::new)
-            )
-            .map(Board::new)
-            .toList();
+            lines.pop();
+
+            for(int i = 0; i < 5; i++) {
+                var line = lines.pop().strip();
+                var parts = line.split("\\s+");
+                for(int j = 0; j < 5; j++) {
+                    int value = Integer.parseInt(parts[j]);
+                    rawBoard[i][j] = numbers.get(value);
+                }
+            }
+
+            var board = new Board(rawBoard);
+            boards.add(board);
+        }
 
         return new Input(calledNumbers, boards);
     }
