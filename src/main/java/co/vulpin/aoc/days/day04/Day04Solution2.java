@@ -6,10 +6,12 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class Day04Solution2 extends DaySolution<Day04Solution2.Input> {
+public class Day04Solution2 extends DaySolution<String> {
 
     @Override
-    protected Object solvePart1(Input input) {
+    protected Object solvePart1(String rawInput) {
+        var input = parseInput0(rawInput);
+
         for(var num : input.numbers()) {
             num.mark();
 
@@ -24,7 +26,9 @@ public class Day04Solution2 extends DaySolution<Day04Solution2.Input> {
     }
 
     @Override
-    protected Object solvePart2(Input input) {
+    protected Object solvePart2(String rawInput) {
+        var input = parseInput0(rawInput);
+
         var boards = new ArrayList<>(input.boards());
 
         for(var num : input.numbers()) {
@@ -49,7 +53,11 @@ public class Day04Solution2 extends DaySolution<Day04Solution2.Input> {
     }
 
     @Override
-    protected Input parseInput(String input) {
+    protected String parseInput(String input) {
+        return input;
+    }
+
+    protected Input parseInput0(String input) {
         var lines = input.lines()
             .collect(Collectors.toCollection(LinkedList::new));
 
