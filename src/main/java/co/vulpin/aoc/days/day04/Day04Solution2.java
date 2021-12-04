@@ -8,20 +8,20 @@ import java.util.stream.Collectors;
 
 public class Day04Solution2 extends DaySolution<Day04Solution2.Input> {
 
-@Override
-protected Object solvePart1(Input input) {
-    for(var num : input.numbers()) {
-        num.mark();
+    @Override
+    protected Object solvePart1(Input input) {
+        for(var num : input.numbers()) {
+            num.mark();
 
-        for(var board : input.boards()) {
-            if(board.hasWon()) {
-                return board.getWinningValue(num.value());
+            for(var board : input.boards()) {
+                if(board.hasWon()) {
+                    return board.getWinningValue(num.value());
+                }
             }
         }
-    }
 
-    throw new IllegalStateException();
-}
+        throw new IllegalStateException();
+    }
 
     @Override
     protected Object solvePart2(Input input) {
