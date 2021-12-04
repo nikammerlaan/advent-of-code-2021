@@ -32,7 +32,6 @@ public class Day04Solution extends DaySolution<String> {
         var boards = new ArrayList<>(input.boards());
 
         for(var num : input.numbers()) {
-            System.out.println(num.value());
             num.mark();
 
             var newBoards = new ArrayList<Board>();
