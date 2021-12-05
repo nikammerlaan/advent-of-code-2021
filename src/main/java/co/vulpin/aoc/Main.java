@@ -30,15 +30,15 @@ public class Main {
         System.out.printf("Part 2\n\tAnswer: %s\n\tDuration: %,dms\n\n", part2.result(), part2.duration().toMillis());
     }
 
-    private static DaySolution<?> getDaySolution(int dayNumber) throws Exception {
+    private static DaySolution getDaySolution(int dayNumber) throws Exception {
         var clazz = getDaySolutionClass(dayNumber);
         var constructor = clazz.getConstructor();
         return constructor.newInstance();
     }
 
-    private static Class<DaySolution<?>> getDaySolutionClass(int dayNumber) throws Exception {
+    private static Class<DaySolution> getDaySolutionClass(int dayNumber) throws Exception {
         var className = String.format(CLASS_NAME_FORMAT, dayNumber, dayNumber);
-        return (Class<DaySolution<?>>) Class.forName(className);
+        return (Class<DaySolution>) Class.forName(className);
     }
 
     private static int getDayNumber() {
