@@ -1,13 +1,13 @@
 package co.vulpin.aoc.days.day05;
 
-import co.vulpin.aoc.days.AbstractDaySolution;
+import co.vulpin.aoc.days.AbstractSeparateDaySolution;
 import co.vulpin.aoc.misc.Point;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class Day05Solution extends AbstractDaySolution<List<Day05Solution.Input>> {
+public class Day05Solution extends AbstractSeparateDaySolution<List<Day05Solution.Input>> {
 
     @Override
     protected Object solvePart1(List<Input> input) {
