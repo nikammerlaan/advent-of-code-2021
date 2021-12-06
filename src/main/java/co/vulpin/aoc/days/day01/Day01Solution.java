@@ -23,9 +23,28 @@ public class Day01Solution extends AbstractDaySolution<List<Integer>> {
                 .sum()
             )
             .boxed()
-            .collect(Collectors.toCollection(ArrayList::new));
+            .collect(Collectors.toList());
 
         return getIncreasingCount(windows);
+    }
+
+    private int getIncreasingCount(List<Integer> list) {
+        var iter = list.iterator();
+        if(!iter.hasNext()) {
+            return 0;
+        }
+
+        int count = 0;
+        int previous = iter.next();
+        while(iter.hasNext()) {
+            int current = iter.next();
+            if(current > previous) {
+                count++;
+            }
+            previous = current;
+        }
+
+        return count;
     }
 
     @Override
@@ -33,16 +52,6 @@ public class Day01Solution extends AbstractDaySolution<List<Integer>> {
         return Arrays.stream(input.split("\n"))
             .map(Integer::parseInt)
             .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private int getIncreasingCount(List<Integer> list) {
-        int count = 0;
-        for(int i = 0; i < list.size() - 1; i++) {
-            if(list.get(i) < list.get(i + 1)) {
-                count++;
-            }
-        }
-        return count;
     }
 
 }
