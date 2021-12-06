@@ -23,7 +23,7 @@ public class Day01Solution extends AbstractDaySolution<List<Integer>> {
                 .sum()
             )
             .boxed()
-            .collect(Collectors.toList());
+            .toList();
 
         return getIncreasingCount(windows);
     }
