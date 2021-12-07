@@ -4,32 +4,23 @@ import co.vulpin.aoc.days.AbstractDaySolution;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Day01Solution extends AbstractDaySolution<List<Integer>> {
 
     @Override
     protected Object solvePart1(List<Integer> input) {
-        return getIncreasingCount(input);
+        return getIncreasingCount(input.iterator());
     }
 
     @Override
     protected Object solvePart2(List<Integer> input) {
-        var windows = IntStream.range(0, input.size() - 2)
-            .map(i -> IntStream.rangeClosed(i, i + 2)
-                .map(input::get)
-                .sum()
-            )
-            .boxed()
-            .toList();
-
-        return getIncreasingCount(windows);
+        return getIncreasingCount(new RollingSumIterator(input, 3));
     }
 
-    private int getIncreasingCount(List<Integer> list) {
-        var iter = list.iterator();
+    private int getIncreasingCount(Iterator<Integer> iter) {
         if(!iter.hasNext()) {
             return 0;
         }
@@ -52,6 +43,49 @@ public class Day01Solution extends AbstractDaySolution<List<Integer>> {
         return Arrays.stream(input.split("\n"))
             .map(Integer::parseInt)
             .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private static class RollingSumIterator implements Iterator<Integer> {
+
+        private final Iterator<Integer> on;
+        private final Iterator<Integer> off;
+
+        private boolean first;
+        private int current;
+
+        public RollingSumIterator(List<Integer> source, int windowSize) {
+            this.on = source.iterator();
+            this.off = source.iterator();
+
+            for(int i = 0; i < windowSize; i++) {
+                if(on.hasNext()) {
+                    this.current += on.next();
+                } else {
+                    throw new IllegalStateException("Source size is less than window size");
+                }
+            }
+
+            this.first = true;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return on.hasNext();
+        }
+
+        @Override
+        public Integer next() {
+            if(first) {
+                first = false;
+                return current;
+            } else {
+                current += on.next();
+                current -= off.next();
+
+                return current;
+            }
+        }
+
     }
 
 }
