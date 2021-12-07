@@ -22,6 +22,8 @@ public class Day07Solution extends AbstractDaySolution<List<Integer>> {
             .average()
             .orElseThrow();
 
+        // On the test case, it wants rounding up. On my input, it wants rounding down.
+        // Just calculate both and then find which one is better.
         var down = getTotalFuelUsed(input, this::getFuelUsedPart2, (int) Math.floor(average));
         var up = getTotalFuelUsed(input, this::getFuelUsedPart2, (int) Math.ceil(average));
 
