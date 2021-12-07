@@ -2,11 +2,9 @@ package co.vulpin.aoc.days.day01;
 
 import co.vulpin.aoc.days.AbstractDaySolution;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Day01Solution extends AbstractDaySolution<List<Integer>> {
 
@@ -42,7 +40,7 @@ public class Day01Solution extends AbstractDaySolution<List<Integer>> {
     protected List<Integer> parseInput(String input) {
         return Arrays.stream(input.split("\n"))
             .map(Integer::parseInt)
-            .collect(Collectors.toCollection(ArrayList::new));
+            .toList();
     }
 
     private static class RollingSumIterator implements Iterator<Integer> {
