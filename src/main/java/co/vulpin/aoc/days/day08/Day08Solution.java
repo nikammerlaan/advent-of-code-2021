@@ -100,7 +100,7 @@ public class Day08Solution extends AbstractDaySolution<List<Day08Solution.Displa
         var three = Set.of(a, c, d, f, g);
         var six = Set.of(a, b, d, e, f, g);
 
-        var digits = display.outputs().stream()
+        var rawOutput = display.outputs().stream()
             .map(set -> {
                 if(set.equals(zero)) {
                     return 0;
@@ -127,7 +127,7 @@ public class Day08Solution extends AbstractDaySolution<List<Day08Solution.Displa
             .map(String::valueOf)
             .collect(Collectors.joining());
 
-        return Integer.parseInt(digits);
+        return Integer.parseInt(rawOutput);
     }
 
     @Override
