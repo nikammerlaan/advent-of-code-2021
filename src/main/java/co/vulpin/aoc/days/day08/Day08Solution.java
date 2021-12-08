@@ -12,7 +12,8 @@ public class Day08Solution extends AbstractDaySolution<List<Day08Solution.Displa
         return input.stream()
             .map(Display::outputs)
             .flatMap(List::stream)
-            .filter(s -> Set.of(2,3,4,7).contains(s.size()))
+            .map(Set::size)
+            .filter(Set.of(2,3,4,7)::contains)
             .count();
     }
 
