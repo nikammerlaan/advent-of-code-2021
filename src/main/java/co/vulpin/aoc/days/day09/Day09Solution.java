@@ -35,13 +35,13 @@ public class Day09Solution extends AbstractDaySolution<int[][]> {
                     continue;
                 }
 
-                var flowTo = getAdjacentPoints(board, x, y).stream()
+                var flowsTo = getAdjacentPoints(board, x, y).stream()
                     .filter(point -> board[point.x()][point.y()] < value)
                     .findFirst()
                     .orElse(null);
 
-                if(flowTo != null) {
-                    flow.put(new Point(x, y), flowTo);
+                if(flowsTo != null) {
+                    flow.put(new Point(x, y), flowsTo);
                 }
             }
         }
