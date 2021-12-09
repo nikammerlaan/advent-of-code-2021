@@ -82,7 +82,7 @@ public class Day09Solution extends AbstractDaySolution<int[][]> {
         }
 
         if(x + 1 < board.length) {
-            points.add(new Point(x +1, y));
+            points.add(new Point(x + 1, y));
         }
 
         if(y - 1 >= 0) {
