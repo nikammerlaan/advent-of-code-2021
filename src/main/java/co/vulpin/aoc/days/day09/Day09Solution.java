@@ -26,6 +26,7 @@ public class Day09Solution extends AbstractDaySolution<int[][]> {
     protected Object solvePart2(int[][] board) {
         var flow = new HashMap<Point, Point>();
 
+        // Calculate the adjacent point for which every point flows to
         for(int x = 0; x < board.length; x++) {
             for(int y = 0; y < board[x].length; y++) {
                 int value = board[x][y];
@@ -45,6 +46,8 @@ public class Day09Solution extends AbstractDaySolution<int[][]> {
             }
         }
 
+        // Simplify flow
+        // ie, a->b->c->d to a->d
         for(int x = 0; x < board.length; x++) {
             for(int y = 0; y < board[x].length; y++) {
                 var point = new Point(x, y);
@@ -61,6 +64,7 @@ public class Day09Solution extends AbstractDaySolution<int[][]> {
             }
         }
 
+        // Group by destination and cont
         return flow.values().stream()
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
             .values().stream()
