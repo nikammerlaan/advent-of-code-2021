@@ -69,7 +69,7 @@ public class Day09Solution extends AbstractDaySolution<int[][]> {
             .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
             .values().stream()
             .sorted(Collections.reverseOrder())
-            .map(i -> i + 1)
+            .map(i -> i + 1) // Add one for the low point because it technically doesn't "flow" anywhere
             .limit(3)
             .reduce(1L, (a, b) -> a * b);
     }
