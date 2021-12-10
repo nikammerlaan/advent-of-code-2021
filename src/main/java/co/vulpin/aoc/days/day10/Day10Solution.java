@@ -30,8 +30,8 @@ public class Day10Solution extends AbstractDaySolution<List<Day10Solution.Row>> 
     @Override
     protected Object solvePart1(List<Row> input) {
         return input.stream()
-            .filter(row -> row.errorChar() != null)
             .map(Row::errorChar)
+            .filter(Objects::nonNull)
             .mapToInt(ERROR_SCORES::get)
             .sum();
     }
