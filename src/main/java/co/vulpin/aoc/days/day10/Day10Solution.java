@@ -58,28 +58,30 @@ public class Day10Solution extends AbstractDaySolution<List<Day10Solution.Row>> 
     @Override
     protected List<Row> parseInput(String rawInput) {
         return Arrays.stream(rawInput.split("\n"))
-            .map(row -> {
-                var stack = new LinkedList<Character>();
-                Character unexpectedChar = null;
-
-                for(char c : row.toCharArray()) {
-                    if(PAIRS.containsKey(c)) {
-                        stack.add(c);
-                    } else {
-                        var last = stack.pollLast();
-
-                        var expected = PAIRS.get(last);
-
-                        if(expected != c) {
-                            unexpectedChar = c;
-                            break;
-                        }
-                    }
-                }
-
-                return new Row(stack, unexpectedChar);
-            })
+            .map(this::parseRow)
             .toList();
+    }
+
+    private Row parseRow(String row) {
+        var stack = new LinkedList<Character>();
+        Character unexpectedChar = null;
+
+        for(char c : row.toCharArray()) {
+            if(PAIRS.containsKey(c)) {
+                stack.add(c);
+            } else {
+                var last = stack.pollLast();
+
+                var expected = PAIRS.get(last);
+
+                if(expected != c) {
+                    unexpectedChar = c;
+                    break;
+                }
+            }
+        }
+
+        return new Row(stack, unexpectedChar);
     }
 
     record Row(LinkedList<Character> remainingStack, Character errorChar) {}
