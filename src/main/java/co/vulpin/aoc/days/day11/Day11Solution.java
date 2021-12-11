@@ -32,40 +32,40 @@ public class Day11Solution extends AbstractDaySolution<int[][]> {
     }
 
     private int runIteration(int[][] input) {
-        for(int i = 0; i < input.length; i++) {
-            var row = input[i];
-            for(int j = 0; j < row.length; j++) {
-                row[j]++;
-            }
-        }
-
         int flashCount = 0;
         boolean[][] flashed = new boolean[10][10];
+        for(int x = 0; x < input.length; x++) {
+            var row = input[x];
+            for(int y = 0; y < row.length; y++) {
+                flashCount += increment(input, flashed, x, y);
+            }
+        }
+        return flashCount;
+    }
 
-        boolean cont = true;
-        while(cont) {
-            cont = false;
-            for(int i = 0; i < input.length; i++) {
-                var row = input[i];
-                for(int j = 0; j < row.length; j++) {
-                    if(row[j] > 9) {
-                        row[j] = 0;
-                        flashCount++;
-                        flashed[i][j] = true;
-                        cont = true;
+    private int increment(int[][] board, boolean[][] flashed, int x, int y) {
+        if(flashed[x][y]) {
+            return 0;
+        }
 
-                        for(int iA = i - 1; iA <= i + 1; iA++) {
-                            if(iA < 0 || iA >= input.length) {
-                                continue;
-                            }
-                            for(int jA = j - 1; jA <= j + 1; jA++) {
-                                if(jA < 0 || jA >= input[iA].length || (iA == i && jA == j) || flashed[iA][jA]) {
-                                    continue;
-                                }
-                                input[iA][jA]++;
-                            }
-                        }
+        board[x][y]++;
+
+        int flashCount = 0;
+
+        if(board[x][y] > 9) {
+            board[x][y] = 0;
+            flashed[x][y] = true;
+            flashCount++;
+
+            for(int xA = x - 1; xA <= x + 1; xA++) {
+                if(xA < 0 || xA >= board.length) {
+                    continue;
+                }
+                for(int yA = y - 1; yA <= y + 1; yA++) {
+                    if(yA < 0 || yA >= board[xA].length || (xA == x && yA == y) || flashed[xA][yA]) {
+                        continue;
                     }
+                    flashCount += increment(board, flashed, xA, yA);
                 }
             }
         }
