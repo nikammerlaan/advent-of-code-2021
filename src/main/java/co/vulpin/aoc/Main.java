@@ -3,6 +3,8 @@ package co.vulpin.aoc;
 import co.vulpin.aoc.data.Result;
 import co.vulpin.aoc.days.DaySolution;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -13,11 +15,11 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         var dayNumber = getDayNumber();
-
         System.out.printf("Day %02d\n------\n\n", dayNumber);
 
         var daySolution = getDaySolution(dayNumber);
-        var result = daySolution.calculateAnswers();
+        var input = getInput(dayNumber);
+        var result = daySolution.calculateAnswers(input);
         printResult(result);
     }
 
@@ -39,6 +41,12 @@ public class Main {
     private static Class<DaySolution> getDaySolutionClass(int dayNumber) throws Exception {
         var className = String.format(CLASS_NAME_FORMAT, dayNumber, dayNumber);
         return (Class<DaySolution>) Class.forName(className);
+    }
+
+    private static String getInput(int dayNumber) throws Exception {
+        var clazz = getDaySolutionClass(dayNumber);
+        var path = "src/main/java/" + clazz.getPackageName().replace(".", "/") + "/input.txt";
+        return Files.readString(new File(path).toPath());
     }
 
     private static int getDayNumber() {

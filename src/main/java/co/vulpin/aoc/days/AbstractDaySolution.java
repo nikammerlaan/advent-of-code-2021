@@ -3,16 +3,12 @@ package co.vulpin.aoc.days;
 import co.vulpin.aoc.data.Result;
 import co.vulpin.aoc.misc.Utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.concurrent.ForkJoinPool;
 
 public abstract class AbstractDaySolution<E> implements DaySolution {
 
     @Override
-    public Result calculateAnswers() {
-        var rawInput = retrieveRawInput();
+    public Result calculateAnswers(String rawInput) {
         var parseTimeResult = Utils.timeExecution(() -> parseInput(rawInput));
         var input = parseTimeResult.result();
 
@@ -32,14 +28,5 @@ public abstract class AbstractDaySolution<E> implements DaySolution {
     protected abstract Object solvePart2(E input);
 
     protected abstract E parseInput(String rawInput);
-
-    public String retrieveRawInput() {
-        try {
-            var path = "src/main/java/" + getClass().getPackageName().replace(".", "/") + "/input.txt";
-            return Files.readString(new File(path).toPath());
-        } catch(IOException e) {
-            throw new RuntimeException("Error while reading input", e);
-        }
-    }
 
 }

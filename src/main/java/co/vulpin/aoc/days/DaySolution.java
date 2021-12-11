@@ -4,6 +4,6 @@ import co.vulpin.aoc.data.Result;
 
 public interface DaySolution {
 
-    Result calculateAnswers();
+    Result calculateAnswers(String input);
 
 }
