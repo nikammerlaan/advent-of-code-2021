@@ -1,12 +1,12 @@
 package co.vulpin.aoc.days.day07;
 
-import co.vulpin.aoc.days.AbstractDaySolution;
+import co.vulpin.aoc.days.AbstractDayParallelSolution;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 
-public class Day07Solution extends AbstractDaySolution<List<Integer>> {
+public class Day07Solution extends AbstractDayParallelSolution<List<Integer>> {
 
     @Override
     protected Object solvePart1(List<Integer> input) {

@@ -1,10 +1,10 @@
 package co.vulpin.aoc.days.day10;
 
-import co.vulpin.aoc.days.AbstractDaySolution;
+import co.vulpin.aoc.days.AbstractDayParallelSolution;
 
 import java.util.*;
 
-public class Day10Solution extends AbstractDaySolution<List<Day10Solution.Row>> {
+public class Day10Solution extends AbstractDayParallelSolution<List<Day10Solution.Row>> {
 
     private static final Map<Character, Character> PAIRS = Map.of(
         '(', ')',
