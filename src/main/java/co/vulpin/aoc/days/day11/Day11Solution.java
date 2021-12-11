@@ -62,7 +62,7 @@ public class Day11Solution extends AbstractDaySolution<int[][]> {
                     continue;
                 }
                 for(int yA = y - 1; yA <= y + 1; yA++) {
-                    if(yA < 0 || yA >= board[xA].length || (xA == x && yA == y) || flashed[xA][yA]) {
+                    if(yA < 0 || yA >= board[xA].length || (xA == x && yA == y)) {
                         continue;
                     }
                     flashCount += increment(board, flashed, xA, yA);
