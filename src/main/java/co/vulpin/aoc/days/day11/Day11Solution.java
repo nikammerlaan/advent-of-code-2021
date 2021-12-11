@@ -42,8 +42,9 @@ public class Day11Solution extends AbstractDaySolution<int[][]> {
         int flashCount = 0;
         boolean[][] flashed = new boolean[10][10];
 
-        while(true) {
-            boolean anyFlashed = false;
+        boolean cont = true;
+        while(cont) {
+            cont = false;
             for(int i = 0; i < input.length; i++) {
                 var row = input[i];
                 for(int j = 0; j < row.length; j++) {
@@ -51,7 +52,7 @@ public class Day11Solution extends AbstractDaySolution<int[][]> {
                         row[j] = 0;
                         flashCount++;
                         flashed[i][j] = true;
-                        anyFlashed = true;
+                        cont = true;
 
                         for(int iA = i - 1; iA <= i + 1; iA++) {
                             if(iA < 0 || iA >= input.length) {
@@ -66,10 +67,6 @@ public class Day11Solution extends AbstractDaySolution<int[][]> {
                         }
                     }
                 }
-            }
-
-            if(!anyFlashed) {
-                break;
             }
         }
 
