@@ -53,7 +53,7 @@ public class Day12Solution extends AbstractDayParallelSolution<Day12Solution.Nod
 
     @Override
     protected Node parseInput(String rawInput) {
-        Map<String, Node> nodes = new HashMap<>();
+        var nodes = new HashMap<String, Node>();
 
         for(var row : rawInput.split("\n")) {
             var parts = row.split("-");
