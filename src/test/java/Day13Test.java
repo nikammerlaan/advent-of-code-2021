@@ -11,28 +11,26 @@ public class Day13Test extends DayTest {
 
     @Override
     protected void assertExampleResult(Result result) {
-        assertEquals(17, result.part1Result().result());
+        assertEquals(17L, result.part1Result().result());
         assertEquals("""
             #####
             #...#
             #...#
             #...#
             #####
-            .....
-            .....
             """, result.part2Result().result());
     }
 
     @Override
     protected void assertRealResult(Result result) {
-        assertEquals(653, result.part1Result().result());
+        assertEquals(653L, result.part1Result().result());
         assertEquals("""
-            #....#..#.###..####.###..###..###..#..#.
-            #....#.#..#..#.#....#..#.#..#.#..#.#.#..
-            #....##...#..#.###..###..#..#.#..#.##...
-            #....#.#..###..#....#..#.###..###..#.#..
-            #....#.#..#.#..#....#..#.#....#.#..#.#..
-            ####.#..#.#..#.####.###..#....#..#.#..#.
+            #....#..#.###..####.###..###..###..#..#
+            #....#.#..#..#.#....#..#.#..#.#..#.#.#.
+            #....##...#..#.###..###..#..#.#..#.##..
+            #....#.#..###..#....#..#.###..###..#.#.
+            #....#.#..#.#..#....#..#.#....#.#..#.#.
+            ####.#..#.#..#.####.###..#....#..#.#..#
             """, result.part2Result().result());
     }
 

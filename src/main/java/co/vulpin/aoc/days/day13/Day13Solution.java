@@ -3,42 +3,34 @@ package co.vulpin.aoc.days.day13;
 import co.vulpin.aoc.days.AbstractDayParallelSolution;
 import co.vulpin.aoc.misc.Point;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Day13Solution extends AbstractDayParallelSolution<Day13Solution.Input> {
 
     @Override
     protected Object solvePart1(Input input) {
-        var grid = buildGrid(input.points());
-
         var firstFold = input.folds().get(0);
-        grid = fold(grid, firstFold);
-
-        int count = 0;
-        for(var row : grid) {
-            for(var b : row) {
-                if(b) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
+        return input.points().stream()
+            .map(point -> transformPoint(point, firstFold))
+            .distinct()
+            .count();
     }
 
     @Override
     protected Object solvePart2(Input input) {
-        var grid = buildGrid(input.points());
+        var points = (Set<Point>) new HashSet<>(input.points());
 
         for(var fold : input.folds()) {
-            grid = fold(grid, fold);
+            points = points.stream()
+                .map(point -> transformPoint(point, fold))
+                .collect(Collectors.toSet());
         }
 
-        return gridToString(grid);
+        return pointsToString(points);
     }
 
-    private boolean[][] buildGrid(List<Point> points) {
+    private String pointsToString(Set<Point> points) {
         int maxX = 0;
         int maxY = 0;
 
@@ -51,64 +43,33 @@ public class Day13Solution extends AbstractDayParallelSolution<Day13Solution.Inp
             }
         }
 
-        boolean[][] grid = new boolean[maxX + 1][maxY + 1];
-
-        for(var point : points) {
-            grid[point.x()][point.y()] = true;
-        }
-
-        return grid;
-    }
-
-    private String gridToString(boolean[][] grid) {
         var stringBuilder = new StringBuilder();
-        for(int y = 0; y < grid[0].length; y++) {
-            for(int x = 0; x < grid.length; x++) {
-                stringBuilder.append(grid[x][y] ? '#' : '.');
+        for(int y = 0; y <= maxY; y++) {
+            for(int x = 0; x <= maxX; x++) {
+                var point = new Point(x, y);
+                stringBuilder.append(points.contains(point) ? '#' : '.');
             }
             stringBuilder.append("\n");
         }
         return stringBuilder.toString();
     }
 
-    private boolean[][] fold(boolean[][] grid, Fold fold) {
-        int newXSize = grid.length;
-        int newYSize = grid[0].length;
-
+    private Point transformPoint(Point point, Fold fold) {
         if(fold.axis() == 'x') {
-            newXSize = fold.value();
+            if(point.x() > fold.value()) {
+                int newX = fold.value() - (point.x() - fold.value());
+                return new Point(newX, point.y());
+            } else {
+                return point;
+            }
         } else {
-            newYSize = fold.value();
-        }
-
-        boolean[][] newGrid = new boolean[newXSize][newYSize];
-
-        for(int x = 0; x < grid.length; x++) {
-            var row = grid[x];
-
-            if(fold.axis() == 'x' && fold.value() == x) {
-                continue;
-            }
-
-            int newX = x;
-            if(fold.axis() == 'x' && newX > fold.value()) {
-                newX = fold.value() - (x - fold.value());
-            }
-
-            for(int y = 0; y < row.length; y++) {
-                if(fold.axis() == 'y' && fold.value() == y) {
-                    continue;
-                }
-
-                int newY = y;
-                if(fold.axis() == 'y' && y > fold.value()) {
-                    newY = fold.value() - (y - fold.value());
-                }
-
-                newGrid[newX][newY] = newGrid[newX][newY] || grid[x][y];
+            if(point.y() > fold.value()) {
+                int newY = fold.value() - (point.y() - fold.value());
+                return new Point(point.x(), newY);
+            } else {
+                return point;
             }
         }
-        return newGrid;
     }
 
     @Override
@@ -142,4 +103,5 @@ public class Day13Solution extends AbstractDayParallelSolution<Day13Solution.Inp
     
     record Input(List<Point> points, List<Fold> folds) {}
     record Fold(char axis, int value) {}
+
 }

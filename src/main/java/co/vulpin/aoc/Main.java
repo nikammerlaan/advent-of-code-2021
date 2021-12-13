@@ -17,7 +17,7 @@ public class Main {
         System.out.printf("Day %02d\n------\n\n", dayNumber);
 
         var daySolution = getDaySolution(dayNumber);
-        var input = InputUtils.getRealInput(dayNumber);
+        var input = InputUtils.getExampleInput(dayNumber);
         var result = daySolution.calculateAnswers(input);
         printResult(result);
     }
