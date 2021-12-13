@@ -19,7 +19,7 @@ public class Day13Solution extends AbstractDayParallelSolution<Day13Solution.Inp
 
     @Override
     protected Object solvePart2(Input input) {
-        var points = (Set<Point>) new HashSet<>(input.points());
+        Set<Point> points = new HashSet<>(input.points());
 
         for(var fold : input.folds()) {
             points = points.stream()
