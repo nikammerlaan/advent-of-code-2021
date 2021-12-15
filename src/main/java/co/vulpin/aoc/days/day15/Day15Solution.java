@@ -41,13 +41,17 @@ public class Day15Solution extends AbstractDayParallelSolution<int[][]> {
 
         var visited = new boolean[len][len];
 
-        var queue = new TreeSet<>(Comparator.comparingInt(Point::x).thenComparingInt(Point::y));
+        var queue = new LinkedList<Point>();
         queue.add(new Point(0, 0));
 
         while(!queue.isEmpty()) {
             var point = queue.pollFirst();
             var x = point.x();
             var y = point.y();
+
+            if(visited[x][y]) {
+                continue;
+            }
 
             var neighbors = getNeighbors(grid, point);
 
@@ -57,6 +61,7 @@ public class Day15Solution extends AbstractDayParallelSolution<int[][]> {
                 var newPath = shortestPath[point.x()][point.y()] + neighborRisk;
                 if(newPath < existingShortestPath) {
                     shortestPath[neighbor.x()][neighbor.y()] = newPath;
+                    visited[neighbor.x()][neighbor.y()] = false;
                     queue.add(neighbor);
                 } else if(!visited[neighbor.x()][neighbor.y()]) {
                     queue.add(neighbor);
