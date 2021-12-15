@@ -17,19 +17,13 @@ public class Day15Solution extends AbstractDayParallelSolution<int[][]> {
         var len = input.length;
         var grid = new int[len * 5][len * 5];
 
-        for(int gridX = 0; gridX < 5; gridX++) {
-            for(int gridY = 0; gridY < 5; gridY++) {
-                int increase = gridX + gridY;
-
-                for(int x = 0; x < len; x++) {
-                    for(int y = 0; y < len; y++) {
-                        int newValue = input[x][y] + increase;
-                        if(newValue >= 10) {
-                            newValue = newValue % 10 + 1;
-                        }
-                        grid[gridX * len + x][gridY * len + y] = newValue;
-                    }
+        for(int x = 0; x < grid.length; x++) {
+            for(int y = 0; y < grid.length; y++) {
+                int value = input[x % len][y % len] + x / len + y / len;
+                if(value >= 10) {
+                    value = value % 10 + 1;
                 }
+                grid[x][y] = value;
             }
         }
 
