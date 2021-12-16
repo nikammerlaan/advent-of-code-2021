@@ -30,7 +30,7 @@ public class Day16Solution extends AbstractDayParallelSolution<Day16Solution.Pac
         var packetsParsed = 0;
         var packets = new ArrayList<Packet>();
 
-        while((limit == -1 && i.get() < input.length()) || packetsParsed < limit) {
+        while(i.get() < input.length() && (limit == -1 || packetsParsed < limit)) {
             var packet = parsePacket(input, i);
             packets.add(packet);
             packetsParsed++;
