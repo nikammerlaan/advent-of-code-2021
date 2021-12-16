@@ -7,15 +7,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 public class Day16Solution extends AbstractDayParallelSolution<Day16Solution.Packet> {
 
     @Override
-    protected Object solvePart1(Packet parentPacket) {
-        return parentPacket.stream()
-            .mapToInt(Packet::version)
-            .sum();
+    protected Object solvePart1(Packet packet) {
+        return packet.getSummedVersion();
     }
 
     @Override
@@ -121,10 +118,10 @@ public class Day16Solution extends AbstractDayParallelSolution<Day16Solution.Pac
             };
         }
 
-        public Stream<Packet> stream() {
-            var childrenStream = children.stream()
-                .flatMap(Packet::stream);
-            return Stream.concat(Stream.of(this), childrenStream);
+        public int getSummedVersion() {
+            return version + children.stream()
+                .mapToInt(Packet::getSummedVersion)
+                .sum();
         }
 
     }
