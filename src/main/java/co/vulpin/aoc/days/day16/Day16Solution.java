@@ -17,7 +17,7 @@ public class Day16Solution extends AbstractDayParallelSolution<Day16Solution.Pac
 
     @Override
     protected Object solvePart2(Packet packet) {
-        return packet.getValue();
+        return packet.value();
     }
 
     @Override
@@ -49,11 +49,11 @@ public class Day16Solution extends AbstractDayParallelSolution<Day16Solution.Pac
                 var totalBitLength = getIntSubstring(input, i, 15);
                 var rawChildren = getSubstring(input, i, totalBitLength);
                 var children = parsePackets(rawChildren, new AtomicInteger(0), -1);
-                return new Packet(packetVersion, packetTypeId, null, children);
+                return new Packet(packetVersion, packetTypeId, children);
             } else {
                 var childCount = getIntSubstring(input, i, 11);
                 var children = parsePackets(input, i, childCount);
-                return new Packet(packetVersion, packetTypeId, null, children);
+                return new Packet(packetVersion, packetTypeId, children);
             }
         } else {
             var dataBuilder = new StringBuilder();
@@ -67,8 +67,8 @@ public class Day16Solution extends AbstractDayParallelSolution<Day16Solution.Pac
                 }
             }
 
-            var data = Long.parseLong(dataBuilder.toString(), 2);
-            return new Packet(packetVersion, packetTypeId, data, Collections.emptyList());
+            var value = Long.parseLong(dataBuilder.toString(), 2);
+            return new Packet(packetVersion, packetTypeId, value);
         }
     }
 
@@ -80,48 +80,62 @@ public class Day16Solution extends AbstractDayParallelSolution<Day16Solution.Pac
         return s.substring(i.get(), i.addAndGet(length));
     }
 
-    record Packet(int version, int type, Long data, List<Packet> children) {
+    record Packet(int version, int type, long value, List<Packet> children) {
 
-        public long getValue() {
-            return switch(type) {
-                case 0 -> children.stream()
-                    .mapToLong(Packet::getValue)
-                    .sum();
-                case 1 -> children.stream()
-                    .mapToLong(Packet::getValue)
-                    .reduce(1, (a, b) -> a * b);
-                case 2 -> children.stream()
-                    .mapToLong(Packet::getValue)
-                    .min()
-                    .orElseThrow();
-                case 3 -> children.stream()
-                    .mapToLong(Packet::getValue)
-                    .max()
-                    .orElseThrow();
-                case 4 -> data;
-                case 5 -> {
-                    var first = children.get(0);
-                    var second = children.get(1);
-                    yield first.getValue() > second.getValue() ? 1 : 0;
-                }
-                case 6 -> {
-                    var first = children.get(0);
-                    var second = children.get(1);
-                    yield first.getValue() < second.getValue() ? 1 : 0;
-                }
-                case 7 -> {
-                    var first = children.get(0);
-                    var second = children.get(1);
-                    yield first.getValue() == second.getValue() ? 1 : 0;
-                }
-                default -> throw new IllegalStateException();
-            };
+        // Constructor for operator packets
+        public Packet(int version, int type, List<Packet> children) {
+            this(
+                version,
+                type,
+                computeValue(type, children),
+                children
+            );
+        }
+
+        // Constructor for literal packets
+        public Packet(int version, int type, long value) {
+            this(version, type, value, Collections.emptyList());
         }
 
         public int getSummedVersion() {
             return version + children.stream()
                 .mapToInt(Packet::getSummedVersion)
                 .sum();
+        }
+
+        private static long computeValue(int type, List<Packet> children) {
+            return switch(type) {
+                case 0 -> children.stream()
+                    .mapToLong(Packet::value)
+                    .sum();
+                case 1 -> children.stream()
+                    .mapToLong(Packet::value)
+                    .reduce(1, (a, b) -> a * b);
+                case 2 -> children.stream()
+                    .mapToLong(Packet::value)
+                    .min()
+                    .orElseThrow();
+                case 3 -> children.stream()
+                    .mapToLong(Packet::value)
+                    .max()
+                    .orElseThrow();
+                case 5 -> {
+                    var first = children.get(0);
+                    var second = children.get(1);
+                    yield first.value() > second.value() ? 1 : 0;
+                }
+                case 6 -> {
+                    var first = children.get(0);
+                    var second = children.get(1);
+                    yield first.value() < second.value() ? 1 : 0;
+                }
+                case 7 -> {
+                    var first = children.get(0);
+                    var second = children.get(1);
+                    yield first.value() == second.value() ? 1 : 0;
+                }
+                default -> throw new IllegalStateException();
+            };
         }
 
     }
