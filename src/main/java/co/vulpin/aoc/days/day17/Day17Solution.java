@@ -10,12 +10,12 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
     @Override
     protected Object solvePart1(Box input) {
         int max = 0;
-        for(int xVel = 0; xVel < 1000; xVel++) {
-            for(int yVel = max + 1; yVel < 1000; yVel++) {
+        for(int xVel = 0; xVel < 500; xVel++) {
+            for(int yVel = max + 1; yVel < 500; yVel++) {
                 var iter = new PointIterator(xVel, yVel, input);
                 int iterMax = 0;
                 boolean hitsBox = false;
-                for(int i = 0; i < 250 && iter.hasNext(); i++) {
+                while(iter.hasNext()) {
                     var point = iter.next();
                     if(point.y() > iterMax) {
                         iterMax = point.y();
@@ -36,12 +36,12 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
     @Override
     protected Object solvePart2(Box input) {
         int count = 0;
-        for(int xVel = 0; xVel < 1000; xVel++) {
-            for(int yVel = -1000; yVel < 1000; yVel++) {
+        for(int xVel = 0; xVel < 250; xVel++) {
+            for(int yVel = -250; yVel < 250; yVel++) {
                 var iter = new PointIterator(xVel, yVel, input);
                 int iterMax = 0;
                 boolean hitsBox = false;
-                for(int i = 0; i < 1000 && iter.hasNext(); i++) {
+                while(iter.hasNext()) {
                     var point = iter.next();
                     if(point.y() > iterMax) {
                         iterMax = point.y();
