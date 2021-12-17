@@ -9,54 +9,47 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
 
     @Override
     protected Object solvePart1(Box input) {
-        int max = 0;
-        for(int xVel = 0; xVel < 500; xVel++) {
-            for(int yVel = max + 1; yVel < 500; yVel++) {
-                var iter = new PointIterator(xVel, yVel, input);
-                int iterMax = 0;
-                boolean hitsBox = false;
-                while(iter.hasNext()) {
-                    var point = iter.next();
-                    if(point.y() > iterMax) {
-                        iterMax = point.y();
-                    }
-                    if(input.isInBox(point)) {
-                        hitsBox = true;
-                        break;
-                    }
-                }
-                if(hitsBox && iterMax > max) {
-                    max = iterMax;
+        int globalMaxY = -1;
+        for(int xVel = 0; xVel < 250; xVel++) {
+            for(int yVel = globalMaxY + 1; yVel < 250; yVel++) {
+                if(hitsBox(input, xVel, yVel)) {
+                    globalMaxY = getMaxY(yVel);
                 }
             }
         }
-        return max;
+        return globalMaxY;
     }
 
     @Override
-    protected Object solvePart2(Box input) {
+    protected Object solvePart2(Box target) {
         int count = 0;
         for(int xVel = 0; xVel < 250; xVel++) {
             for(int yVel = -250; yVel < 250; yVel++) {
-                var iter = new PointIterator(xVel, yVel, input);
-                int iterMax = 0;
-                boolean hitsBox = false;
-                while(iter.hasNext()) {
-                    var point = iter.next();
-                    if(point.y() > iterMax) {
-                        iterMax = point.y();
-                    }
-                    if(input.isInBox(point)) {
-                        hitsBox = true;
-                        break;
-                    }
-                }
-                if(hitsBox) {
+                if(hitsBox(target, xVel, yVel)) {
                     count++;
                 }
             }
         }
         return count;
+    }
+
+    private boolean hitsBox(Box box, int xVelocity, int yVelocity) {
+        var iter = new PointIterator(xVelocity, yVelocity, box);
+        while(iter.hasNext()) {
+            var point = iter.next();
+            if(box.isInBox(point)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private int getMaxY(int yVelocity) {
+        if(yVelocity > 0) {
+            return (yVelocity * yVelocity + yVelocity) / 2;
+        } else {
+            return 0;
+        }
     }
 
     @Override
@@ -97,9 +90,18 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
 
         @Override
         public boolean hasNext() {
+            // If you're below the box and have a Y velocity <=0, then you'll never hit the box
             if(yVelocity <= 0 && target.yRange().compareTo(y) < 0) {
                 return false;
-            } else if(xVelocity == 0 && !target.xRange().isInRange(x)) {
+            }
+
+            // If you're to the right of the box moving right
+            if(xVelocity > 0 && target.xRange().compareTo(x) > 0) {
+                return false;
+            }
+
+            // If you are not above/below the box and have 0 X velocity, then you'll never hit the box
+            if(xVelocity == 0 && !target.xRange().isInRange(x)) {
                 return false;
             }
 
@@ -124,7 +126,6 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
 
             return point;
         }
-
     }
 
     record Box(Range xRange, Range yRange) {
