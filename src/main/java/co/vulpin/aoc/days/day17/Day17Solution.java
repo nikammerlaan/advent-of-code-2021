@@ -4,8 +4,11 @@ import co.vulpin.aoc.days.AbstractDayParallelSolution;
 import co.vulpin.aoc.misc.Point;
 
 import java.util.Iterator;
+import java.util.regex.Pattern;
 
 public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box> {
+
+    private static final Pattern REGEX = Pattern.compile("target area: x=(-?[0-9]+)\\.\\.(-?[0-9]+), y=(-?[0-9]+)\\.\\.(-?[0-9]+)");
 
     @Override
     protected Object solvePart1(Box input) {
@@ -54,20 +57,14 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
 
     @Override
     protected Box parseInput(String input) {
-        input = input.split(": ")[1];
-        var parts = input.split(", ");
-
-        var xRange = parseRange(parts[0].split("=")[1]);
-        var yRange = parseRange(parts[1].split("=")[1]);
-
-        return new Box(xRange, yRange);
-    }
-
-    private Range parseRange(String part) {
-        var parts = part.split("\\.\\.");
-        var start = Integer.parseInt(parts[0]);
-        var end = Integer.parseInt(parts[1]);
-        return new Range(start, end);
+        var matcher = REGEX.matcher(input);
+        if(matcher.find()) {
+            var xRange = new Range(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+            var yRange = new Range(Integer.parseInt(matcher.group(3)), Integer.parseInt(matcher.group(4)));
+            return new Box(xRange, yRange);
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     private static class PointIterator implements Iterator<Point> {
