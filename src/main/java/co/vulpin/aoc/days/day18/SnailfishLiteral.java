@@ -18,6 +18,22 @@ public final class SnailfishLiteral extends SnailfishNumber {
         this.value = value;
     }
 
+    public void split() {
+        var replacementLeft = new SnailfishLiteral(value / 2);
+        var replacementRight = new SnailfishLiteral(value / 2 + value % 2);
+
+        var replacement = new SnailfishPair(replacementLeft, replacementRight);
+        replacement.setParent(parent);
+        replacementLeft.setParent(replacement);
+        replacementRight.setParent(replacement);
+
+        if(parent.getLeft() == this) {
+            parent.setLeft(replacement);
+        } else {
+            parent.setRight(replacement);
+        }
+    }
+
     @Override
     public SnailfishNumber makeClone() {
         return new SnailfishLiteral(value);

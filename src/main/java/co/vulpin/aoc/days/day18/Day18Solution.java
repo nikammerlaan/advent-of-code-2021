@@ -38,7 +38,7 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
 
     private void reduce(SnailfishPair input) {
         while(true) {
-            if(explodeAny(input, input, 0)) {
+            if(explodeAny(input, 0)) {
                 continue;
             }
 
@@ -48,21 +48,21 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
         }
     }
 
-    private boolean explodeAny(SnailfishPair root, SnailfishPair input, int depth) {
+    private boolean explodeAny(SnailfishPair input, int depth) {
         if(depth == 4) {
-            explode(root, input);
+            input.explode();
             return true;
         }
 
         if(input.getLeft() instanceof SnailfishPair pair) {
-            var reduced = explodeAny(root, pair, depth + 1);
+            var reduced = explodeAny(pair, depth + 1);
             if(reduced) {
                 return true;
             }
         }
 
         if(input.getRight() instanceof SnailfishPair pair) {
-            var reduced = explodeAny(root, pair, depth + 1);
+            var reduced = explodeAny(pair, depth + 1);
             if(reduced) {
                 return true;
             }
@@ -84,56 +84,12 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
             }
         } else if(input instanceof SnailfishLiteral literal) {
             if(literal.getValue() >= 10) {
-                split(literal);
+                literal.split();
                 return true;
             }
         }
 
         return false;
-    }
-
-    private void split(SnailfishLiteral literal) {
-        var parent = literal.getParent();
-
-        var replacementLeft = new SnailfishLiteral(literal.getValue() / 2);
-        var replacementRight = new SnailfishLiteral(literal.getValue() / 2 + literal.getValue() % 2);
-
-        var replacement = new SnailfishPair(replacementLeft, replacementRight);
-        replacement.setParent(parent);
-        replacementLeft.setParent(replacement);
-        replacementRight.setParent(replacement);
-
-        if(parent.getLeft() == literal) {
-            parent.setLeft(replacement);
-        } else {
-            parent.setRight(replacement);
-        }
-    }
-
-    private void explode(SnailfishPair root, SnailfishPair pair) {
-        var flattened = root.flatten();
-
-        var leftIndex = flattened.indexOf((SnailfishLiteral) pair.getLeft());
-        var rightIndex = leftIndex + 1;
-
-        if(leftIndex > 0) {
-            var moreLeft = flattened.get(leftIndex - 1);
-            moreLeft.setValue(moreLeft.getValue() + ((SnailfishLiteral) pair.getLeft()).getValue());
-        }
-
-        if(rightIndex < flattened.size() - 1) {
-            var moreRight = flattened.get(rightIndex + 1);
-            moreRight.setValue(moreRight.getValue() + ((SnailfishLiteral) pair.getRight()).getValue());
-        }
-
-        var parent = pair.getParent();
-        var replacement = new SnailfishLiteral(0);
-        replacement.setParent(parent);
-        if(parent.getLeft() == pair) {
-            parent.setLeft(replacement);
-        } else {
-            parent.setRight(replacement);
-        }
     }
 
     @Override

@@ -29,6 +29,31 @@ public final class SnailfishPair extends SnailfishNumber {
         this.right = right;
     }
 
+    public void explode() {
+        var flattened = getRoot().flatten();
+
+        var leftIndex = flattened.indexOf((SnailfishLiteral) left);
+        var rightIndex = leftIndex + 1;
+
+        if(leftIndex > 0) {
+            var moreLeft = flattened.get(leftIndex - 1);
+            moreLeft.setValue(moreLeft.getValue() + ((SnailfishLiteral) left).getValue());
+        }
+
+        if(rightIndex < flattened.size() - 1) {
+            var moreRight = flattened.get(rightIndex + 1);
+            moreRight.setValue(moreRight.getValue() + ((SnailfishLiteral) right).getValue());
+        }
+
+        var replacement = new SnailfishLiteral(0);
+        replacement.setParent(parent);
+        if(parent.getLeft() == this) {
+            parent.setLeft(replacement);
+        } else {
+            parent.setRight(replacement);
+        }
+    }
+
     @Override
     public List<SnailfishLiteral> flatten() {
         var list = new ArrayList<SnailfishLiteral>();
