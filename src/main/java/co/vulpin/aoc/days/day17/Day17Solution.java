@@ -12,15 +12,7 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
 
     @Override
     protected Object solvePart1(Box input) {
-        int maxY = -1;
-        for(int xVel = 0; xVel < 250; xVel++) {
-            for(int yVel = maxY + 1; yVel < 250; yVel++) {
-                if(hitsBox(input, xVel, yVel)) {
-                    maxY = getMaxY(yVel);
-                }
-            }
-        }
-        return maxY;
+        return getMaxY(Math.abs(input.yRange().start()) - 1);
     }
 
     @Override
