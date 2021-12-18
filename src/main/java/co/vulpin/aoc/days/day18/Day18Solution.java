@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solution.SnailfishPair>> {
+public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPair>> {
 
     @Override
     protected Object solvePart1(List<SnailfishPair> input) {
@@ -196,115 +196,4 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
         return parent;
     }
 
-    interface SnailfishNumber {
-
-        void setParent(SnailfishPair parent);
-        int getMagnitude();
-        SnailfishNumber makeClone();
-
-    }
-
-    public static class SnailfishPair implements SnailfishNumber {
-
-        private SnailfishPair parent;
-
-        private SnailfishNumber left;
-        private SnailfishNumber right;
-
-        public SnailfishPair(SnailfishNumber left, SnailfishNumber right) {
-            this.left = left;
-            this.right = right;
-        }
-
-        public SnailfishPair getParent() {
-            return parent;
-        }
-
-        public void setParent(SnailfishPair parent) {
-            this.parent = parent;
-        }
-
-        public SnailfishNumber getLeft() {
-            return left;
-        }
-
-        public SnailfishNumber getRight() {
-            return right;
-        }
-
-        public void setLeft(SnailfishNumber left) {
-            this.left = left;
-        }
-
-        public void setRight(SnailfishNumber right) {
-            this.right = right;
-        }
-
-        @Override
-        public int getMagnitude() {
-            return 3 * left.getMagnitude() + 2 * right.getMagnitude();
-        }
-
-        @Override
-        public SnailfishPair makeClone() {
-            SnailfishNumber leftClone = left.makeClone();
-            SnailfishNumber rightClone = right.makeClone();
-
-            SnailfishPair clone = new SnailfishPair(leftClone, rightClone);
-            leftClone.setParent(clone);
-            rightClone.setParent(clone);
-
-            return clone;
-        }
-
-        @Override
-        public String toString() {
-            return "[" + left + "," + right + "]";
-        }
-
-    }
-
-    public static class SnailfishLiteral implements SnailfishNumber {
-
-        private int value;
-
-        private SnailfishPair parent;
-
-        public SnailfishLiteral(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public void setValue(int value) {
-            this.value = value;
-        }
-
-        public SnailfishPair getParent() {
-            return parent;
-        }
-
-        public void setParent(SnailfishPair parent) {
-            this.parent = parent;
-        }
-
-        @Override
-        public SnailfishNumber makeClone() {
-            return new SnailfishLiteral(value);
-        }
-
-        @Override
-        public int getMagnitude() {
-            return value;
-        }
-
-        @Override
-        public String toString() {
-            return String.valueOf(value);
-        }
-
-    }
-    
 }
