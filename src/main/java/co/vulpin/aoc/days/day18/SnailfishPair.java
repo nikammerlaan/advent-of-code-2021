@@ -29,6 +29,43 @@ public final class SnailfishPair extends SnailfishNumber {
         this.right = right;
     }
 
+    public boolean explodeRecursively() {
+        return explodeRecursively(0);
+    }
+
+    private boolean explodeRecursively(int depth) {
+        if(depth == 4) {
+            explode();
+            return true;
+        }
+
+        if(left instanceof SnailfishPair pair) {
+            var exploded = pair.explodeRecursively(depth + 1);
+            if(exploded) {
+                return true;
+            }
+        }
+
+        if(right instanceof SnailfishPair pair) {
+            var exploded = pair.explodeRecursively(depth + 1);
+            if(exploded) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean splitRecursively() {
+        var leftSplit = left.splitRecursively();
+        if(leftSplit) {
+            return true;
+        }
+
+        return right.splitRecursively();
+    }
+
     public void explode() {
         var flattened = getRoot().flatten();
 

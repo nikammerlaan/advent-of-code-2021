@@ -38,58 +38,14 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
 
     private void reduce(SnailfishPair input) {
         while(true) {
-            if(explodeAny(input, 0)) {
+            if(input.explodeRecursively()) {
                 continue;
             }
 
-            if(!splitAny(input)) {
+            if(!input.splitRecursively()) {
                 break;
             }
         }
-    }
-
-    private boolean explodeAny(SnailfishPair input, int depth) {
-        if(depth == 4) {
-            input.explode();
-            return true;
-        }
-
-        if(input.getLeft() instanceof SnailfishPair pair) {
-            var reduced = explodeAny(pair, depth + 1);
-            if(reduced) {
-                return true;
-            }
-        }
-
-        if(input.getRight() instanceof SnailfishPair pair) {
-            var reduced = explodeAny(pair, depth + 1);
-            if(reduced) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean splitAny(SnailfishNumber input) {
-        if(input instanceof SnailfishPair pair) {
-            var splitLeft = splitAny(pair.getLeft());
-            if(splitLeft) {
-                return true;
-            }
-
-            var splitRight = splitAny(pair.getRight());
-            if(splitRight) {
-                return true;
-            }
-        } else if(input instanceof SnailfishLiteral literal) {
-            if(literal.getValue() >= 10) {
-                literal.split();
-                return true;
-            }
-        }
-
-        return false;
     }
 
     @Override

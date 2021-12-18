@@ -20,6 +20,8 @@ public abstract sealed class SnailfishNumber permits SnailfishPair, SnailfishLit
 
     public abstract List<SnailfishLiteral> flatten();
 
+    public abstract boolean splitRecursively();
+
     public SnailfishPair getRoot() {
         if(parent != null) {
             return parent.getRoot();

@@ -18,6 +18,16 @@ public final class SnailfishLiteral extends SnailfishNumber {
         this.value = value;
     }
 
+    @Override
+    public boolean splitRecursively() {
+        if(value >= 10) {
+            split();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void split() {
         var replacementLeft = new SnailfishLiteral(value / 2);
         var replacementRight = new SnailfishLiteral(value / 2 + value % 2);
