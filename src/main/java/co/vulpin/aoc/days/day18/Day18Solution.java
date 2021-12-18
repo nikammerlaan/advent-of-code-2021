@@ -2,7 +2,6 @@ package co.vulpin.aoc.days.day18;
 
 import co.vulpin.aoc.days.AbstractDayParallelSolution;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -112,7 +111,7 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
     }
 
     private void explode(SnailfishPair root, SnailfishPair pair) {
-        var flattened = flatten(root);
+        var flattened = root.flatten();
 
         var leftIndex = flattened.indexOf((SnailfishLiteral) pair.getLeft());
         var rightIndex = leftIndex + 1;
@@ -135,24 +134,6 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
         } else {
             parent.setRight(replacement);
         }
-    }
-
-    private List<SnailfishLiteral> flatten(SnailfishPair pair) {
-        var list = new ArrayList<SnailfishLiteral>();
-
-        if(pair.getLeft() instanceof SnailfishLiteral literal) {
-            list.add(literal);
-        } else if(pair.getLeft() instanceof SnailfishPair leftPair) {
-            list.addAll(flatten(leftPair));
-        }
-
-        if(pair.getRight() instanceof SnailfishLiteral literal) {
-            list.add(literal);
-        } else if(pair.getRight() instanceof SnailfishPair rightPair) {
-            list.addAll(flatten(rightPair));
-        }
-
-        return list;
     }
 
     @Override

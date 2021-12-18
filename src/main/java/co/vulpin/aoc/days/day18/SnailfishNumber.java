@@ -1,5 +1,7 @@
 package co.vulpin.aoc.days.day18;
 
+import java.util.List;
+
 public abstract sealed class SnailfishNumber permits SnailfishPair, SnailfishLiteral {
 
     protected SnailfishPair parent;
@@ -15,6 +17,8 @@ public abstract sealed class SnailfishNumber permits SnailfishPair, SnailfishLit
     public abstract int getMagnitude();
 
     public abstract SnailfishNumber makeClone();
+
+    public abstract List<SnailfishLiteral> flatten();
 
     public SnailfishPair getRoot() {
         if(parent != null) {

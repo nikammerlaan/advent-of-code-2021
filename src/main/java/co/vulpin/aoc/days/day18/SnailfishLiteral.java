@@ -1,5 +1,7 @@
 package co.vulpin.aoc.days.day18;
 
+import java.util.List;
+
 public final class SnailfishLiteral extends SnailfishNumber {
 
     private int value;
@@ -19,6 +21,11 @@ public final class SnailfishLiteral extends SnailfishNumber {
     @Override
     public SnailfishNumber makeClone() {
         return new SnailfishLiteral(value);
+    }
+
+    @Override
+    public List<SnailfishLiteral> flatten() {
+        return List.of(this);
     }
 
     @Override

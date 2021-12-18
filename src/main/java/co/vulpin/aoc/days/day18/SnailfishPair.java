@@ -1,5 +1,8 @@
 package co.vulpin.aoc.days.day18;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class SnailfishPair extends SnailfishNumber {
 
     private SnailfishNumber left;
@@ -24,6 +27,16 @@ public final class SnailfishPair extends SnailfishNumber {
 
     public void setRight(SnailfishNumber right) {
         this.right = right;
+    }
+
+    @Override
+    public List<SnailfishLiteral> flatten() {
+        var list = new ArrayList<SnailfishLiteral>();
+
+        list.addAll(left.flatten());
+        list.addAll(right.flatten());
+
+        return list;
     }
 
     @Override
