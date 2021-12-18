@@ -1,6 +1,7 @@
 package co.vulpin.aoc.days.day17;
 
 import co.vulpin.aoc.days.AbstractDayParallelSolution;
+import co.vulpin.aoc.misc.MathUtils;
 import co.vulpin.aoc.misc.Point;
 
 import java.util.Iterator;
@@ -12,7 +13,7 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
 
     @Override
     protected Object solvePart1(Box input) {
-        return getMaxY(Math.abs(input.yRange().start()) - 1);
+        return MathUtils.getTriangleNumber(Math.abs(input.yRange().start()) - 1);
     }
 
     @Override
@@ -37,14 +38,6 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
             }
         }
         return false;
-    }
-
-    private int getMaxY(int yVelocity) {
-        if(yVelocity > 0) {
-            return (yVelocity * yVelocity + yVelocity) / 2;
-        } else {
-            return 0;
-        }
     }
 
     @Override
