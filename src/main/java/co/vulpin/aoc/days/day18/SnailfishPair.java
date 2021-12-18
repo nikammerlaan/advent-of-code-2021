@@ -33,10 +33,10 @@ public final class SnailfishPair extends SnailfishNumber {
 
     @Override
     public SnailfishPair makeClone() {
-        SnailfishNumber leftClone = left.makeClone();
-        SnailfishNumber rightClone = right.makeClone();
+        var leftClone = left.makeClone();
+        var rightClone = right.makeClone();
 
-        SnailfishPair clone = new SnailfishPair(leftClone, rightClone);
+        var clone = new SnailfishPair(leftClone, rightClone);
         leftClone.setParent(clone);
         rightClone.setParent(clone);
 
