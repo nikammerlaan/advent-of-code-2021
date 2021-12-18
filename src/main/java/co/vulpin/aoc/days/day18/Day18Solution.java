@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solution.ShellfishPair>> {
+public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solution.SnailfishPair>> {
 
     @Override
-    protected Object solvePart1(List<ShellfishPair> input) {
+    protected Object solvePart1(List<SnailfishPair> input) {
         var added = input.stream()
             .reduce(this::add)
             .orElseThrow();
@@ -17,27 +17,27 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
     }
 
     @Override
-    protected Object solvePart2(List<ShellfishPair> input) {
+    protected Object solvePart2(List<SnailfishPair> input) {
         return input.stream()
             .flatMapToInt(a -> input.stream()
                 .map(b -> add(a, b))
-                .mapToInt(ShellfishPair::getMagnitude)
+                .mapToInt(SnailfishPair::getMagnitude)
             )
             .max()
             .orElseThrow();
     }
 
-    private ShellfishPair add(ShellfishPair a, ShellfishPair b) {
+    private SnailfishPair add(SnailfishPair a, SnailfishPair b) {
         var aClone = a.makeClone();
         var bClone = b.makeClone();
-        var pair = new ShellfishPair(aClone, bClone);
+        var pair = new SnailfishPair(aClone, bClone);
         aClone.setParent(pair);
         bClone.setParent(pair);
         reduce(pair);
         return pair;
     }
 
-    private void reduce(ShellfishPair input) {
+    private void reduce(SnailfishPair input) {
         while(true) {
             if(explodeAny(input, input, 0)) {
                 continue;
@@ -49,20 +49,20 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
         }
     }
 
-    private boolean explodeAny(ShellfishPair root, ShellfishPair input, int depth) {
+    private boolean explodeAny(SnailfishPair root, SnailfishPair input, int depth) {
         if(depth == 4) {
             explode(root, input);
             return true;
         }
 
-        if(input.getLeft() instanceof ShellfishPair pair) {
+        if(input.getLeft() instanceof SnailfishPair pair) {
             var reduced = explodeAny(root, pair, depth + 1);
             if(reduced) {
                 return true;
             }
         }
 
-        if(input.getRight() instanceof ShellfishPair pair) {
+        if(input.getRight() instanceof SnailfishPair pair) {
             var reduced = explodeAny(root, pair, depth + 1);
             if(reduced) {
                 return true;
@@ -72,8 +72,8 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
         return false;
     }
 
-    private boolean splitAny(ShellfishNumber input) {
-        if(input instanceof ShellfishPair pair) {
+    private boolean splitAny(SnailfishNumber input) {
+        if(input instanceof SnailfishPair pair) {
             var splitLeft = splitAny(pair.getLeft());
             if(splitLeft) {
                 return true;
@@ -83,7 +83,7 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
             if(splitRight) {
                 return true;
             }
-        } else if(input instanceof ShellfishLiteral literal) {
+        } else if(input instanceof SnailfishLiteral literal) {
             if(literal.getValue() >= 10) {
                 split(literal);
                 return true;
@@ -93,13 +93,13 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
         return false;
     }
 
-    private void split(ShellfishLiteral literal) {
+    private void split(SnailfishLiteral literal) {
         var parent = literal.getParent();
 
-        var replacementLeft = new ShellfishLiteral(literal.getValue() / 2);
-        var replacementRight = new ShellfishLiteral(literal.getValue() / 2 + literal.getValue() % 2);
+        var replacementLeft = new SnailfishLiteral(literal.getValue() / 2);
+        var replacementRight = new SnailfishLiteral(literal.getValue() / 2 + literal.getValue() % 2);
 
-        var replacement = new ShellfishPair(replacementLeft, replacementRight);
+        var replacement = new SnailfishPair(replacementLeft, replacementRight);
         replacement.setParent(parent);
         replacementLeft.setParent(replacement);
         replacementRight.setParent(replacement);
@@ -111,24 +111,24 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
         }
     }
 
-    private void explode(ShellfishPair root, ShellfishPair pair) {
+    private void explode(SnailfishPair root, SnailfishPair pair) {
         var flattened = flatten(root);
 
-        var leftIndex = flattened.indexOf((ShellfishLiteral) pair.getLeft());
+        var leftIndex = flattened.indexOf((SnailfishLiteral) pair.getLeft());
         var rightIndex = leftIndex + 1;
 
         if(leftIndex > 0) {
             var moreLeft = flattened.get(leftIndex - 1);
-            moreLeft.setValue(moreLeft.getValue() + ((ShellfishLiteral) pair.getLeft()).getValue());
+            moreLeft.setValue(moreLeft.getValue() + ((SnailfishLiteral) pair.getLeft()).getValue());
         }
 
         if(rightIndex < flattened.size() - 1) {
             var moreRight = flattened.get(rightIndex + 1);
-            moreRight.setValue(moreRight.getValue() + ((ShellfishLiteral) pair.getRight()).getValue());
+            moreRight.setValue(moreRight.getValue() + ((SnailfishLiteral) pair.getRight()).getValue());
         }
 
         var parent = pair.getParent();
-        var replacement = new ShellfishLiteral(0);
+        var replacement = new SnailfishLiteral(0);
         replacement.setParent(parent);
         if(parent.getLeft() == pair) {
             parent.setLeft(replacement);
@@ -137,18 +137,18 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
         }
     }
 
-    private List<ShellfishLiteral> flatten(ShellfishPair pair) {
-        var list = new ArrayList<ShellfishLiteral>();
+    private List<SnailfishLiteral> flatten(SnailfishPair pair) {
+        var list = new ArrayList<SnailfishLiteral>();
 
-        if(pair.getLeft() instanceof ShellfishLiteral literal) {
+        if(pair.getLeft() instanceof SnailfishLiteral literal) {
             list.add(literal);
-        } else if(pair.getLeft() instanceof ShellfishPair leftPair) {
+        } else if(pair.getLeft() instanceof SnailfishPair leftPair) {
             list.addAll(flatten(leftPair));
         }
 
-        if(pair.getRight() instanceof ShellfishLiteral literal) {
+        if(pair.getRight() instanceof SnailfishLiteral literal) {
             list.add(literal);
-        } else if(pair.getRight() instanceof ShellfishPair rightPair) {
+        } else if(pair.getRight() instanceof SnailfishPair rightPair) {
             list.addAll(flatten(rightPair));
         }
 
@@ -156,20 +156,20 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
     }
 
     @Override
-    protected List<ShellfishPair> parseInput(String rawInput) {
+    protected List<SnailfishPair> parseInput(String rawInput) {
         return Arrays.stream(rawInput.split("\n"))
             .map(this::parseExpression)
-            .map(n -> (ShellfishPair) n)
+            .map(n -> (SnailfishPair) n)
             .toList();
     }
 
-    private ShellfishNumber parseExpression(String input) {
+    private SnailfishNumber parseExpression(String input) {
         try {
             int value = Integer.parseInt(input);
-            return new ShellfishLiteral(value);
+            return new SnailfishLiteral(value);
         } catch (NumberFormatException e) {}
 
-        ShellfishNumber left = null;
+        SnailfishNumber left = null;
 
         var depth = 0;
         int commaPosition = -1;
@@ -189,54 +189,54 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
 
         var right = parseExpression(input.substring(commaPosition + 1, input.length() - 1));
 
-        var parent = new ShellfishPair(left, right);
+        var parent = new SnailfishPair(left, right);
         left.setParent(parent);
         right.setParent(parent);
 
         return parent;
     }
 
-    interface ShellfishNumber {
+    interface SnailfishNumber {
 
-        void setParent(ShellfishPair parent);
+        void setParent(SnailfishPair parent);
         int getMagnitude();
-        ShellfishNumber makeClone();
+        SnailfishNumber makeClone();
 
     }
 
-    public static class ShellfishPair implements ShellfishNumber {
+    public static class SnailfishPair implements SnailfishNumber {
 
-        private ShellfishPair parent;
+        private SnailfishPair parent;
 
-        private ShellfishNumber left;
-        private ShellfishNumber right;
+        private SnailfishNumber left;
+        private SnailfishNumber right;
 
-        public ShellfishPair(ShellfishNumber left, ShellfishNumber right) {
+        public SnailfishPair(SnailfishNumber left, SnailfishNumber right) {
             this.left = left;
             this.right = right;
         }
 
-        public ShellfishPair getParent() {
+        public SnailfishPair getParent() {
             return parent;
         }
 
-        public void setParent(ShellfishPair parent) {
+        public void setParent(SnailfishPair parent) {
             this.parent = parent;
         }
 
-        public ShellfishNumber getLeft() {
+        public SnailfishNumber getLeft() {
             return left;
         }
 
-        public ShellfishNumber getRight() {
+        public SnailfishNumber getRight() {
             return right;
         }
 
-        public void setLeft(ShellfishNumber left) {
+        public void setLeft(SnailfishNumber left) {
             this.left = left;
         }
 
-        public void setRight(ShellfishNumber right) {
+        public void setRight(SnailfishNumber right) {
             this.right = right;
         }
 
@@ -246,11 +246,11 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
         }
 
         @Override
-        public ShellfishPair makeClone() {
-            ShellfishNumber leftClone = left.makeClone();
-            ShellfishNumber rightClone = right.makeClone();
+        public SnailfishPair makeClone() {
+            SnailfishNumber leftClone = left.makeClone();
+            SnailfishNumber rightClone = right.makeClone();
 
-            ShellfishPair clone = new ShellfishPair(leftClone, rightClone);
+            SnailfishPair clone = new SnailfishPair(leftClone, rightClone);
             leftClone.setParent(clone);
             rightClone.setParent(clone);
 
@@ -264,13 +264,13 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
 
     }
 
-    public static class ShellfishLiteral implements ShellfishNumber {
+    public static class SnailfishLiteral implements SnailfishNumber {
 
         private int value;
 
-        private ShellfishPair parent;
+        private SnailfishPair parent;
 
-        public ShellfishLiteral(int value) {
+        public SnailfishLiteral(int value) {
             this.value = value;
         }
 
@@ -282,17 +282,17 @@ public class Day18Solution extends AbstractDayParallelSolution<List<Day18Solutio
             this.value = value;
         }
 
-        public ShellfishPair getParent() {
+        public SnailfishPair getParent() {
             return parent;
         }
 
-        public void setParent(ShellfishPair parent) {
+        public void setParent(SnailfishPair parent) {
             this.parent = parent;
         }
 
         @Override
-        public ShellfishNumber makeClone() {
-            return new ShellfishLiteral(value);
+        public SnailfishNumber makeClone() {
+            return new SnailfishLiteral(value);
         }
 
         @Override
