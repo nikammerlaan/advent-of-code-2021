@@ -106,10 +106,7 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
             return new SnailfishLiteral(value);
         } catch (NumberFormatException e) {}
 
-        SnailfishNumber left = null;
-
         var depth = 0;
-        int commaPosition = -1;
         for(int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
 
@@ -118,19 +115,16 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
             } else if(c == ']') {
                 depth--;
             } else if(c == ',' && depth == 1) {
-                commaPosition = i;
-                left = parseExpression(input.substring(1, commaPosition));
-                break;
+                var left = parseExpression(input.substring(1, i));
+                var right = parseExpression(input.substring(i + 1, input.length() - 1));
+                var parent = new SnailfishPair(left, right);
+                left.setParent(parent);
+                right.setParent(parent);
+                return parent;
             }
         }
 
-        var right = parseExpression(input.substring(commaPosition + 1, input.length() - 1));
-
-        var parent = new SnailfishPair(left, right);
-        left.setParent(parent);
-        right.setParent(parent);
-
-        return parent;
+        throw new IllegalStateException();
     }
 
 }
