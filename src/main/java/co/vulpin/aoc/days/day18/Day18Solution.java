@@ -29,17 +29,19 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
     @Override
     protected List<SnailfishPair> parseInput(String rawInput) {
         return Arrays.stream(rawInput.split("\n"))
-            .map(this::parseExpression)
-            .map(n -> (SnailfishPair) n)
+            .map(this::parsePair)
             .toList();
     }
 
-    private SnailfishNumber parseExpression(String input) {
+    private SnailfishNumber parseNumber(String input) {
         try {
-            int value = Integer.parseInt(input);
-            return new SnailfishLiteral(value);
-        } catch (NumberFormatException e) {}
+            return parseLiteral(input);
+        } catch(NumberFormatException e) {
+            return parsePair(input);
+        }
+    }
 
+    private SnailfishPair parsePair(String input) {
         var depth = 0;
         for(int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
@@ -49,8 +51,8 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
             } else if(c == ']') {
                 depth--;
             } else if(c == ',' && depth == 1) {
-                var left = parseExpression(input.substring(1, i));
-                var right = parseExpression(input.substring(i + 1, input.length() - 1));
+                var left = parseNumber(input.substring(1, i));
+                var right = parseNumber(input.substring(i + 1, input.length() - 1));
                 var parent = new SnailfishPair(left, right);
                 left.setParent(parent);
                 right.setParent(parent);
@@ -59,6 +61,11 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
         }
 
         throw new IllegalStateException();
+    }
+
+    private SnailfishLiteral parseLiteral(String input) throws NumberFormatException {
+        int value = Integer.parseInt(input);
+        return new SnailfishLiteral(value);
     }
 
 }
