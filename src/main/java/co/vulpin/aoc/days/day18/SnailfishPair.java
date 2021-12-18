@@ -29,6 +29,29 @@ public final class SnailfishPair extends SnailfishNumber {
         this.right = right;
     }
 
+    public SnailfishPair add(SnailfishPair other) {
+        var thisClone = makeClone();
+        var otherClone = other.makeClone();
+        var clone = new SnailfishPair(thisClone, otherClone);
+        thisClone.setParent(clone);
+        otherClone.setParent(clone);
+        clone.reduce();
+        return clone;
+    }
+
+    public boolean reduce() {
+        while(true) {
+            if(explodeRecursively()) {
+                continue;
+            }
+
+            if(!splitRecursively()) {
+                break;
+            }
+        }
+        return false;
+    }
+
     public boolean explodeRecursively() {
         return explodeRecursively(0);
     }

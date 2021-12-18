@@ -10,7 +10,7 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
     @Override
     protected Object solvePart1(List<SnailfishPair> input) {
         var added = input.stream()
-            .reduce(this::add)
+            .reduce(SnailfishPair::add)
             .orElseThrow();
         return added.getMagnitude();
     }
@@ -19,33 +19,11 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
     protected Object solvePart2(List<SnailfishPair> input) {
         return input.stream()
             .flatMapToInt(a -> input.stream()
-                .map(b -> add(a, b))
+                .map(a::add)
                 .mapToInt(SnailfishPair::getMagnitude)
             )
             .max()
             .orElseThrow();
-    }
-
-    private SnailfishPair add(SnailfishPair a, SnailfishPair b) {
-        var aClone = a.makeClone();
-        var bClone = b.makeClone();
-        var pair = new SnailfishPair(aClone, bClone);
-        aClone.setParent(pair);
-        bClone.setParent(pair);
-        reduce(pair);
-        return pair;
-    }
-
-    private void reduce(SnailfishPair input) {
-        while(true) {
-            if(input.explodeRecursively()) {
-                continue;
-            }
-
-            if(!input.splitRecursively()) {
-                break;
-            }
-        }
     }
 
     @Override
