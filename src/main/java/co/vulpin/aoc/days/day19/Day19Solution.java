@@ -7,6 +7,12 @@ import java.util.stream.Collectors;
 
 public class Day19Solution extends AbstractDayParallelSolution<List<Scanner>> {
 
+    private final Map<NormalizeCacheKey, Scanner> normalizeCache;
+
+    public Day19Solution() {
+        this.normalizeCache = new HashMap<>();
+    }
+
     @Override
     protected Object solvePart1(List<Scanner> input) {
         var fixedScanners = new ArrayList<Scanner>();
@@ -74,6 +80,17 @@ public class Day19Solution extends AbstractDayParallelSolution<List<Scanner>> {
     }
 
     private Scanner normalize(Scanner a, Scanner b) {
+        var cacheKey = new NormalizeCacheKey(a, b);
+        if(normalizeCache.containsKey(cacheKey)) {
+            return normalizeCache.get(cacheKey);
+        } else {
+            var normalized = normalize0(a, b);
+            normalizeCache.put(cacheKey, normalized);
+            return normalized;
+        }
+    }
+
+    private Scanner normalize0(Scanner a, Scanner b) {
         for(int xRotation = 0; xRotation < 4; xRotation++) {
             for(int yRotation = 0; yRotation < 4; yRotation++) {
                 for(int zRotation = 0; zRotation < 4; zRotation++) {
@@ -171,5 +188,7 @@ public class Day19Solution extends AbstractDayParallelSolution<List<Scanner>> {
         var z = Integer.parseInt(parts[2]);
         return new Point3D(x, y, z);
     }
+
+    private record NormalizeCacheKey(Scanner a, Scanner b) {}
 
 }
