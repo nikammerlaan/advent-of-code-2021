@@ -68,12 +68,7 @@ public class Day19Solution extends AbstractDayParallelSolution<List<Scanner>> {
 
         return fixedScanners.stream()
             .flatMapToInt(a -> fixedScanners.stream()
-                .mapToInt(b -> {
-                    int xDistance = Math.abs(a.position().x() - b.position().x());
-                    int yDistance = Math.abs(a.position().y() - b.position().y());
-                    int zDistance = Math.abs(a.position().z() - b.position().z());
-                    return xDistance + yDistance + zDistance;
-                })
+                .mapToInt(b -> getManhattanDistance(a.position(), b.position()))
             )
             .max()
             .orElseThrow();
@@ -140,6 +135,13 @@ public class Day19Solution extends AbstractDayParallelSolution<List<Scanner>> {
             point.y() - offset.y(),
             point.z() - offset.z()
         );
+    }
+
+    private int getManhattanDistance(Point3D a, Point3D b) {
+        var xDistance = Math.abs(a.x() - b.x());
+        var yDistance = Math.abs(a.y() - b.y());
+        var zDistance = Math.abs(a.z() - b.z());
+        return xDistance + yDistance + zDistance;
     }
 
     private Point3D rotatePoint(Point3D point, int xRotation, int yRotation, int zRotation) {
