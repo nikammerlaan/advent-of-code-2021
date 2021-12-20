@@ -78,13 +78,13 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
         int x = point.x(), y = point.y();
         return new Point[] {
             new Point(x - 1, y - 1),
-            new Point(x - 1, y),
+            new Point(x - 1, y    ),
             new Point(x - 1, y + 1),
-            new Point(x, y - 1),
-            new Point(x, y),
-            new Point(x, y + 1),
+            new Point(x,     y - 1),
+            new Point(x,     y    ),
+            new Point(x,     y + 1),
             new Point(x + 1, y - 1),
-            new Point(x + 1, y),
+            new Point(x + 1, y    ),
             new Point(x + 1, y + 1)
         };
     }
