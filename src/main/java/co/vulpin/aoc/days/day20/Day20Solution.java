@@ -5,7 +5,6 @@ import co.vulpin.aoc.misc.Box;
 import co.vulpin.aoc.misc.Point;
 import co.vulpin.aoc.misc.Range;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,17 +93,14 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
     protected Input parseInput(String rawInput) {
         var parts = rawInput.split("\n\n");
 
-        var algo = parseLine(parts[0]);
-
-        var image = Arrays.stream(parts[1].split("\n"))
-            .map(this::parseLine)
-            .toArray(boolean[][]::new);
+        var algo = parseBooleanArrayLine(parts[0]);
 
         var points = new HashSet<Point>();
-        for(int x = 0; x < image.length; x++) {
-            var row = image[x];
-            for(int y = 0; y < row.length; y++) {
-                if(row[y]) {
+        var rows = parts[1].split("\n");
+        for(int x = 0; x < rows.length; x++) {
+            var row = rows[x];
+            for(int y = 0; y < row.length(); y++) {
+                if(row.charAt(y) == '#') {
                     points.add(new Point(x, y));
                 }
             }
@@ -113,7 +109,7 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
         return new Input(algo, points);
     }
 
-    private boolean[] parseLine(String input) {
+    private boolean[] parseBooleanArrayLine(String input) {
         boolean[] arr = new boolean[input.length()];
         for(int i = 0; i < arr.length; i++) {
             arr[i] = input.charAt(i) == '#';
