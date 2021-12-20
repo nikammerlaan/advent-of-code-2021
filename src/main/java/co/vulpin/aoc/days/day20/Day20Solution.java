@@ -30,7 +30,7 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
         return points;
     }
 
-    private Output runIteration(Set<Point> points, boolean[] algo, int i, Box border) {
+    private IterationOutput runIteration(Set<Point> points, boolean[] algo, int i, Box border) {
         var xStats  = points.stream()
             .mapToInt(Point::x)
             .summaryStatistics();
@@ -50,7 +50,7 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
             new Range(xStats.getMin() - 1, xStats.getMax() + 1),
             new Range(yStats.getMin() - 1, yStats.getMax() + 1)
         );
-        return new Output(newPoints, newBorder);
+        return new IterationOutput(newPoints, newBorder);
     }
 
     private boolean shouldBeOn(Point point, Set<Point> points, int i, Box border, boolean[] algo) {
@@ -118,6 +118,6 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
     }
 
     record Input(boolean[] algo, Set<Point> points) {}
-    record Output(Set<Point> points, Box border) {}
+    record IterationOutput(Set<Point> points, Box border) {}
 
 }
