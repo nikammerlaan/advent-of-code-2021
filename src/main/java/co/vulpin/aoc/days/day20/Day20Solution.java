@@ -39,8 +39,8 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
             .mapToInt(Point::y)
             .summaryStatistics();
         var newPoints = new HashSet<Point>();
-        for(int x = xStats.getMin() - 3; x <= xStats.getMax() + 3; x++) {
-            for(int y = yStats.getMin() - 3; y <= yStats.getMax() + 3; y++) {
+        for(int x = xStats.getMin() - 1; x <= xStats.getMax() + 1; x++) {
+            for(int y = yStats.getMin() - 1; y <= yStats.getMax() + 1; y++) {
                 var point = new Point(x, y);
                 if(shouldBeOn(point, points, i, border, algo)) {
                     newPoints.add(point);
@@ -48,8 +48,8 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
             }
         }
         var newBorder = new Box(
-            new Range(xStats.getMin() - 3, xStats.getMax() + 3),
-            new Range(yStats.getMin() - 3, yStats.getMax() + 3)
+            new Range(xStats.getMin() - 1, xStats.getMax() + 1),
+            new Range(yStats.getMin() - 1, yStats.getMax() + 1)
         );
         return new Output(newPoints, newBorder);
     }
