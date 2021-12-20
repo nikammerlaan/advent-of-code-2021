@@ -62,16 +62,8 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
         return algo[index];
     }
 
-    private boolean isOn(Point point, Set<Point> points, int i, Box border, boolean[] algo) {
-        if(points.contains(point)) {
-            return true;
-        }
-
-        if(algo[0] && i % 2 == 1) {
-            return !border.isInBox(point);
-        }
-
-        return false;
+    private boolean isOn(Point point, Set<Point> points, int step, Box border, boolean[] algo) {
+        return points.contains(point) || (algo[0] && step % 2 == 1 && !border.isInBox(point));
     }
 
     private Point[] getAdjacentPoints(Point point) {
