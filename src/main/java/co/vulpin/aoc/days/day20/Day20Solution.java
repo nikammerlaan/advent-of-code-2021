@@ -53,10 +53,10 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
         return new IterationOutput(newPoints, newBorder);
     }
 
-    private boolean shouldBeOn(Point point, Set<Point> points, int i, Box border, boolean[] algo) {
+    private boolean shouldBeOn(Point point, Set<Point> points, int step, Box border, boolean[] algo) {
         int index = 0;
         for(var p : getAdjacentPoints(point)) {
-            boolean isOn = isOn(p, points, i, border, algo);
+            boolean isOn = isOn(p, points, step, border, algo);
             index = (index << 1) + (isOn ? 1 : 0);
         }
         return algo[index];
@@ -65,6 +65,7 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
     private boolean isOn(Point point, Set<Point> points, int step, Box border, boolean[] algo) {
         return points.contains(point) || (algo[0] && step % 2 == 1 && !border.isInBox(point));
     }
+
 
     private Point[] getAdjacentPoints(Point point) {
         int x = point.x(), y = point.y();
