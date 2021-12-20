@@ -11,14 +11,14 @@ public class Day20Test extends DayTest {
 
     @Override
     protected void assertExampleResult(Result result) {
-        assertEquals(null, result.part1Result().result());
-        assertEquals(null, result.part2Result().result());
+        assertEquals(35, result.part1Result().result());
+        assertEquals(3351, result.part2Result().result());
     }
 
     @Override
     protected void assertRealResult(Result result) {
-        assertEquals(null, result.part1Result().result());
-        assertEquals(null, result.part2Result().result());
+        assertEquals(5786, result.part1Result().result());
+        assertEquals(16757, result.part2Result().result());
     }
 
 }
