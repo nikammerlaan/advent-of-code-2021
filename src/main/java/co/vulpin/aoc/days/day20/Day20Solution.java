@@ -1,11 +1,12 @@
 package co.vulpin.aoc.days.day20;
 
 import co.vulpin.aoc.days.AbstractDayParallelSolution;
+import co.vulpin.aoc.misc.Box;
 import co.vulpin.aoc.misc.Point;
+import co.vulpin.aoc.misc.Range;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Input> {
@@ -13,12 +14,10 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
     @Override
     protected Object solvePart1(Input input) {
         var points = input.points();
-        var xBorder = new Range(0, 0);
-        var yBorder = new Range(0, 0);
+        var border = new Box(new Range(0, 0), new Range(0, 0));
         for(int i = 0; i < 2; i++) {
-            var output = runIteration(points, input.algo(), i, xBorder, yBorder);
-            xBorder = output.xBorder();
-            yBorder = output.yBorder();
+            var output = runIteration(points, input.algo(), i, border);
+            border = output.border();
             points = output.points();
         }
         return points.size();
@@ -27,18 +26,16 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
     @Override
     protected Object solvePart2(Input input) {
         var points = input.points();
-        var xBorder = new Range(0, 0);
-        var yBorder = new Range(0, 0);
+        var border = new Box(new Range(0, 0), new Range(0, 0));
         for(int i = 0; i < 50; i++) {
-            var output = runIteration(points, input.algo(), i, xBorder, yBorder);
-            xBorder = output.xBorder();
-            yBorder = output.yBorder();
+            var output = runIteration(points, input.algo(), i, border);
+            border = output.border();
             points = output.points();
         }
         return points.size();
     }
 
-    private Output runIteration(Set<Point> points, boolean[] algo, int i, Range xBorder, Range yBorder) {
+    private Output runIteration(Set<Point> points, boolean[] algo, int i, Box border) {
         var xStats  = points.stream()
             .mapToInt(Point::x)
             .summaryStatistics();
@@ -49,37 +46,52 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
         for(int x = xStats.getMin() - 3; x <= xStats.getMax() + 3; x++) {
             for(int y = yStats.getMin() - 3; y <= yStats.getMax() + 3; y++) {
                 var point = new Point(x, y);
-                if(shouldBeOn(point, points, i, xBorder, yBorder, algo)) {
+                if(shouldBeOn(point, points, i, border, algo)) {
                     newPoints.add(point);
                 }
             }
         }
-        return new Output(newPoints, new Range(xStats.getMin() - 3, xStats.getMax() + 3), new Range(yStats.getMin() - 3, yStats.getMax() + 3));
+        var newBorder = new Box(
+            new Range(xStats.getMin() - 3, xStats.getMax() + 3),
+            new Range(yStats.getMin() - 3, yStats.getMax() + 3)
+        );
+        return new Output(newPoints, newBorder);
     }
 
-    private boolean shouldBeOn(Point point, Set<Point> points, int i, Range xBorder, Range yBorder, boolean[] algo) {
+    private boolean shouldBeOn(Point point, Set<Point> points, int i, Box border, boolean[] algo) {
         int index = 0;
         for(var p : getAdjacentPoints(point)) {
-            boolean isOn = points.contains(p) || (algo[0] && i % 2 == 1 && (!xBorder.isInRange(p.x()) || !yBorder.isInRange(p.y())));
+            boolean isOn = isOn(p, points, i, border, algo);
             index = (index << 1) + (isOn ? 1 : 0);
         }
         return algo[index];
     }
 
-    private List<Point> getAdjacentPoints(Point point) {
+    private boolean isOn(Point point, Set<Point> points, int i, Box border, boolean[] algo) {
+        if(points.contains(point)) {
+            return true;
+        }
+
+        if(algo[0] && i % 2 == 1) {
+            return !border.isInBox(point);
+        }
+
+        return false;
+    }
+
+    private Point[] getAdjacentPoints(Point point) {
         int x = point.x(), y = point.y();
-        return List
-            .of(
-                new Point(x - 1, y - 1),
-                new Point(x - 1, y),
-                new Point(x - 1, y + 1),
-                new Point(x, y - 1),
-                new Point(x, y),
-                new Point(x, y + 1),
-                new Point(x + 1, y - 1),
-                new Point(x + 1, y),
-                new Point(x + 1, y + 1)
-            );
+        return new Point[] {
+            new Point(x - 1, y - 1),
+            new Point(x - 1, y),
+            new Point(x - 1, y + 1),
+            new Point(x, y - 1),
+            new Point(x, y),
+            new Point(x, y + 1),
+            new Point(x + 1, y - 1),
+            new Point(x + 1, y),
+            new Point(x + 1, y + 1)
+        };
     }
 
     @Override
@@ -114,12 +126,6 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
     }
 
     record Input(boolean[] algo, Set<Point> points) {}
-    record Output(Set<Point> points, Range xBorder, Range yBorder) {}
-    record Range(int start, int end) {
+    record Output(Set<Point> points, Box border) {}
 
-        boolean isInRange(int value) {
-            return value >= start && value <= end;
-        }
-
-    }
 }
