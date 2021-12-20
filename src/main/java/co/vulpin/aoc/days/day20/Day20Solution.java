@@ -13,26 +13,22 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
 
     @Override
     protected Object solvePart1(Input input) {
-        var points = input.points();
-        var border = new Box(new Range(0, 0), new Range(0, 0));
-        for(int i = 0; i < 2; i++) {
-            var output = runIteration(points, input.algo(), i, border);
-            border = output.border();
-            points = output.points();
-        }
-        return points.size();
+        return iterate(input.points(), input.algo(), 2).size();
     }
 
     @Override
     protected Object solvePart2(Input input) {
-        var points = input.points();
+        return iterate(input.points(), input.algo(), 50).size();
+    }
+
+    private Set<Point> iterate(Set<Point> points, boolean[] algo, int steps) {
         var border = new Box(new Range(0, 0), new Range(0, 0));
-        for(int i = 0; i < 50; i++) {
-            var output = runIteration(points, input.algo(), i, border);
+        for(int i = 0; i < steps; i++) {
+            var output = runIteration(points, algo, i, border);
             border = output.border();
             points = output.points();
         }
-        return points.size();
+        return points;
     }
 
     private Output runIteration(Set<Point> points, boolean[] algo, int i, Box border) {
