@@ -1,5 +1,7 @@
 package co.vulpin.aoc.days.day17;
 
+import co.vulpin.aoc.misc.Box;
+import co.vulpin.aoc.misc.Range;
 import co.vulpin.aoc.days.AbstractDayParallelSolution;
 import co.vulpin.aoc.misc.MathUtils;
 import co.vulpin.aoc.misc.Point;
@@ -7,7 +9,7 @@ import co.vulpin.aoc.misc.Point;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
-public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box> {
+public class Day17Solution extends AbstractDayParallelSolution<Box> {
 
     private static final Pattern REGEX = Pattern.compile("target area: x=(-?[0-9]+)\\.\\.(-?[0-9]+), y=(-?[0-9]+)\\.\\.(-?[0-9]+)");
 
@@ -107,32 +109,6 @@ public class Day17Solution extends AbstractDayParallelSolution<Day17Solution.Box
             yVelocity--;
 
             return point;
-        }
-    }
-
-    record Box(Range xRange, Range yRange) {
-
-        boolean isInBox(Point point) {
-            return xRange.isInRange(point.x()) && yRange.isInRange(point.y());
-        }
-
-    }
-
-    record Range(int start, int end) implements Comparable<Integer> {
-
-        boolean isInRange(int value) {
-            return value >= start && value <= end;
-        }
-
-        @Override
-        public int compareTo(Integer o) {
-            if(o < start) {
-                return -1;
-            } else if(o > end) {
-                return 1;
-            } else {
-                return 0;
-            }
         }
     }
 
