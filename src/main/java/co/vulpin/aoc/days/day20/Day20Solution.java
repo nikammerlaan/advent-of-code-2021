@@ -60,7 +60,7 @@ public class Day20Solution extends AbstractDayParallelSolution<Day20Solution.Inp
     private boolean shouldBeOn(Point point, Set<Point> points, int i, Range xBorder, Range yBorder, boolean[] algo) {
         int index = 0;
         for(var p : getAdjacentPoints(point)) {
-            boolean isOn = points.contains(p) || (i % 2 == 1 && (!xBorder.isInRange(p.x()) || !yBorder.isInRange(p.y())));
+            boolean isOn = points.contains(p) || (algo[0] && i % 2 == 1 && (!xBorder.isInRange(p.x()) || !yBorder.isInRange(p.y())));
             index = (index << 1) + (isOn ? 1 : 0);
         }
         return algo[index];
