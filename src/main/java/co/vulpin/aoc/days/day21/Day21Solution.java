@@ -59,13 +59,18 @@ public class Day21Solution extends AbstractDayParallelSolution<Day21Solution.Inp
 
         long aWins = 0;
         long bWins = 0;
-        for(int roll = 3; roll <= 9; roll++) {
-            var newA = aTurn ? a.roll(roll) : a;
-            var newB = aTurn ? b : b.roll(roll);
-            var newState = new GameState(newA, newB, !aTurn);
-            var output = simulate(newState);
-            aWins += output.aWins();
-            bWins += output.bWins();
+        for(int x = 1; x <= 3; x++) {
+            for(int y = 1; y <= 3; y++){
+                for(int z = 1; z <= 3; z++) {
+                    int amount = x + y + z;
+                    var newA = aTurn ? a.roll(amount) : a;
+                    var newB = aTurn ? b : b.roll(amount);
+                    var newState = new GameState(newA, newB, !aTurn);
+                    var output = simulate(newState);
+                    aWins += output.aWins();
+                    bWins += output.bWins();
+                }
+            }
         }
 
         var output = new SimulateOutput(aWins, bWins);
