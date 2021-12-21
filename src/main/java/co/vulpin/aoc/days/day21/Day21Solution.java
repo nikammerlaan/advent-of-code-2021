@@ -107,10 +107,6 @@ public class Day21Solution extends AbstractDayParallelSolution<Day21Solution.Inp
         }
 
     }
-    record GameState(PlayerState a, PlayerState b, boolean aTurn) {
-
-
-
-    }
+    record GameState(PlayerState a, PlayerState b, boolean aTurn) {}
 
 }
