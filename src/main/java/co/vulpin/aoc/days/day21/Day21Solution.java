@@ -20,13 +20,14 @@ public class Day21Solution extends AbstractDayParallelSolution<Day21Solution.Inp
 
         int turn = 0;
         var die = new DeterministicDieIterator(PART_1_DIE_SIZE);
-        for(; a.score() < PART_1_TARGET && b.score() < PART_1_TARGET; turn++) {
+        while(a.score() < PART_1_TARGET && b.score() < PART_1_TARGET) {
             int amount = die.next() + die.next() + die.next();
             if(turn % 2 == 0) {
                 a = a.roll(amount);
             } else {
                 b = b.roll(amount);
             }
+            turn++;
         }
 
         return Math.min(a.score(), b.score()) * turn * 3;
@@ -58,18 +59,13 @@ public class Day21Solution extends AbstractDayParallelSolution<Day21Solution.Inp
 
         long aWins = 0;
         long bWins = 0;
-        for(int x = 1; x <= 3; x++) {
-            for(int y = 1; y <= 3; y++){
-                for(int z = 1; z <= 3; z++) {
-                    int amount = x + y + z;
-                    var newA = aTurn ? a.roll(amount) : a;
-                    var newB = aTurn ? b : b.roll(amount);
-                    var newState = new GameState(newA, newB, !aTurn);
-                    var output = simulate(newState);
-                    aWins += output.aWins();
-                    bWins += output.bWins();
-                }
-            }
+        for(int roll = 3; roll <= 9; roll++) {
+            var newA = aTurn ? a.roll(roll) : a;
+            var newB = aTurn ? b : b.roll(roll);
+            var newState = new GameState(newA, newB, !aTurn);
+            var output = simulate(newState);
+            aWins += output.aWins();
+            bWins += output.bWins();
         }
 
         var output = new SimulateOutput(aWins, bWins);
