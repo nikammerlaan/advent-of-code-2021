@@ -11,7 +11,11 @@ public class Day21Solution extends AbstractDayParallelSolution<Day21Solution.Inp
     private static final int PART_1_DIE_SIZE = 100;
     private static final int PART_2_TARGET = 21;
 
-    private final Map<GameState, SimulateOutput> OUTPUT_CACHE = new HashMap<>();
+    private final Map<GameState, SimulateOutput> simulateCache;
+
+    public Day21Solution() {
+        this.simulateCache = new HashMap<>();
+    }
 
     @Override
     protected Object solvePart1(Input input) {
@@ -43,8 +47,8 @@ public class Day21Solution extends AbstractDayParallelSolution<Day21Solution.Inp
     }
 
     private SimulateOutput simulate(GameState state) {
-        if(OUTPUT_CACHE.containsKey(state)) {
-            return OUTPUT_CACHE.get(state);
+        if(simulateCache.containsKey(state)) {
+            return simulateCache.get(state);
         }
 
         var a = state.a();
@@ -74,7 +78,7 @@ public class Day21Solution extends AbstractDayParallelSolution<Day21Solution.Inp
         }
 
         var output = new SimulateOutput(aWins, bWins);
-        OUTPUT_CACHE.put(state, output);
+        simulateCache.put(state, output);
         return output;
     }
 
