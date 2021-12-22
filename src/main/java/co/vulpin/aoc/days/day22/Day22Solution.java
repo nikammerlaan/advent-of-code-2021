@@ -14,7 +14,7 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
 
     @Override
     protected Object solvePart1(List<Day22Solution.Instruction> input) {
-        return solve0(input.stream().limit(20).toList());
+        return solve0(input.subList(0, 20));
     }
 
     @Override
@@ -28,18 +28,13 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
         for(var instruction : input) {
             var box = instruction.box();
 
-            var iter = boxes.iterator();
-            var intersectingBoxes = new ArrayList<Box3D>();
+            var iter = boxes.listIterator();
             while(iter.hasNext()) {
                 var other = iter.next();
                 if(box.intersects(other)) {
                     iter.remove();
-                    intersectingBoxes.add(other);
+                    removeOverlap(box, other).forEach(iter::add);
                 }
-            }
-
-            for(var other : intersectingBoxes) {
-                boxes.addAll(removeOverlap(box, other).toList());
             }
 
             if(instruction.on()) {
