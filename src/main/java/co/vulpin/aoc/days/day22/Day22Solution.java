@@ -33,7 +33,7 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
                 var other = iter.next();
                 if(box.intersects(other)) {
                     iter.remove();
-                    removeOverlap(box, other).forEach(iter::add);
+                    getOverlap(box, other).forEach(iter::add);
                 }
             }
 
@@ -47,7 +47,7 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
             .sum();
     }
 
-    private Stream<Box3D> removeOverlap(Box3D box, Box3D other) {
+    private Stream<Box3D> getOverlap(Box3D box, Box3D other) {
         if(box.contains(other)) {
             return Stream.empty();
         } else if(!box.intersects(other)) {
@@ -55,27 +55,27 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
         }
 
         if(box.x().intersects(other.x()) && !box.x().contains(other.x())) {
-            return removeOverlap(box.x(), other.x()).stream()
+            return getOverlap(box.x(), other.x()).stream()
                 .map(newX -> new Box3D(newX, other.y(), other.z()))
-                .flatMap(newBox -> removeOverlap(box, newBox));
+                .flatMap(newBox -> getOverlap(box, newBox));
         }
 
         if(box.y().intersects(other.y()) && !box.y().contains(other.y())) {
-            return removeOverlap(box.y(), other.y()).stream()
+            return getOverlap(box.y(), other.y()).stream()
                 .map(newY -> new Box3D(other.x(), newY, other.z()))
-                .flatMap(newBox -> removeOverlap(box, newBox));
+                .flatMap(newBox -> getOverlap(box, newBox));
         }
 
         if(box.z().intersects(other.z()) && !box.z().contains(other.z())) {
-            return removeOverlap(box.z(), other.z()).stream()
+            return getOverlap(box.z(), other.z()).stream()
                 .map(newZ -> new Box3D(other.x(), other.y(), newZ))
-                .flatMap(newBox -> removeOverlap(box, newBox));
+                .flatMap(newBox -> getOverlap(box, newBox));
         }
 
         return Stream.of(other);
     }
 
-    private List<Range> removeOverlap(Range range, Range other) {
+    private List<Range> getOverlap(Range range, Range other) {
         if(range.contains(other)) {
             return Collections.singletonList(other);
         }
