@@ -22,7 +22,7 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
         return solve0(input);
     }
 
-    public long solve0(List<Day22Solution.Instruction> input) {
+    private long solve0(List<Day22Solution.Instruction> input) {
         var boxes = new ArrayList<Box3D>();
 
         for(var instruction : input) {
@@ -52,8 +52,7 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
             .sum();
     }
 
-
-    public Stream<Box3D> removeOverlap(Box3D box, Box3D other) {
+    private Stream<Box3D> removeOverlap(Box3D box, Box3D other) {
         if(box.contains(other)) {
             return Stream.empty();
         } else if(!box.intersects(other)) {
@@ -81,7 +80,7 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
         return Stream.of(other);
     }
 
-    public List<Range> removeOverlap(Range range, Range other) {
+    private List<Range> removeOverlap(Range range, Range other) {
         if(range.contains(other)) {
             return Collections.singletonList(other);
         }
