@@ -59,25 +59,18 @@ public class Day23Solution extends AbstractDayParallelSolution<char[][]> {
 
                     for(var destination : getDestinations(new Point(x, y), input)) {
                         int toX = destination.point().x(), toY = destination.point().y();
-                        input[toX][toY] = input[x][y];
+                        input[toX][toY] = value;
                         input[x][y] = '.';
 
-                        Integer cost = solve0(input);
-
+                        var cost = solve0(input);
                         if(cost != null) {
-                            cost += destination.cost() * switch(input[toX][toY]) {
-                                case 'A' -> 1;
-                                case 'B' -> 10;
-                                case 'C' -> 100;
-                                case 'D' -> 1000;
-                                default -> throw new IllegalArgumentException();
-                            };
+                            cost += destination.cost() * getMovementCost(value);
                             if(minCost == null || cost < minCost) {
                                 minCost = cost;
                             }
                         }
 
-                        input[x][y] = input[toX][toY];
+                        input[x][y] = value;
                         input[toX][toY] = '.';
                     }
                 }
@@ -130,12 +123,8 @@ public class Day23Solution extends AbstractDayParallelSolution<char[][]> {
                     int toX = point.x(), toY = point.y();
                     for(int i = 1; true; i++) {
                         char value = input[toX + i][toY];
-                        if(value == input[fromX][fromY]) {
-                            continue;
-                        } else if(value == '#'){
-                            return true;
-                        } else {
-                            return false;
+                        if(value != input[fromX][fromY]) {
+                            return value == '#';
                         }
                     }
                 })
@@ -205,6 +194,16 @@ public class Day23Solution extends AbstractDayParallelSolution<char[][]> {
                 return false;
             }
         }
+    }
+
+    private int getMovementCost(char c) {
+        return switch(c) {
+            case 'A' -> 1;
+            case 'B' -> 10;
+            case 'C' -> 100;
+            case 'D' -> 1000;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     private int getTargetColumn(char c) {
