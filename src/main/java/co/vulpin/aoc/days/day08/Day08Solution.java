@@ -133,7 +133,7 @@ public class Day08Solution extends AbstractDayParallelSolution<List<Day08Solutio
 
     @Override
     protected List<Display> parseInput(String rawInput) {
-        return Arrays.stream(rawInput.split("\n"))
+        return rawInput.lines()
             .map(s -> {
                 var parts = s.split(" \\| ");
                 var patterns = parseMultiple(parts[0]);

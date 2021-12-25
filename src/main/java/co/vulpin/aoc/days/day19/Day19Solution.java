@@ -176,7 +176,7 @@ public class Day19Solution extends AbstractDayParallelSolution<List<Scanner>> {
     }
 
     private Scanner parseScanner(String input) {
-        var points = Arrays.stream(input.split("\n"))
+        var points = input.lines()
             .skip(1)
             .map(this::parsePoint)
             .collect(Collectors.toSet());

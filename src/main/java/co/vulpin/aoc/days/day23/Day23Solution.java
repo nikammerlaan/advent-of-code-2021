@@ -216,7 +216,7 @@ public class Day23Solution extends AbstractDayParallelSolution<char[][]> {
 
     @Override
     protected char[][] parseInput(String rawInput) {
-        return Arrays.stream(rawInput.split("\n"))
+        return rawInput.lines()
             .map(String::toCharArray)
             .toArray(char[][]::new);
     }

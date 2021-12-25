@@ -3,7 +3,6 @@ package co.vulpin.aoc.days.day03;
 import co.vulpin.aoc.days.AbstractDayParallelSolution;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Day03Solution extends AbstractDayParallelSolution<List<String>> {
@@ -69,7 +68,7 @@ public class Day03Solution extends AbstractDayParallelSolution<List<String>> {
 
     @Override
     protected List<String> parseInput(String input) {
-        return Arrays.asList(input.split("\n"));
+        return input.lines().toList();
     }
 
 }

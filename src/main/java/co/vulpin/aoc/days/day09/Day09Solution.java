@@ -105,7 +105,7 @@ public class Day09Solution extends AbstractDayParallelSolution<int[][]> {
 
     @Override
     protected int[][] parseInput(String rawInput) {
-        return Arrays.stream(rawInput.split("\n"))
+        return rawInput.lines()
             .map(s -> s.chars()
                 .map(i -> i - '0')
                 .toArray()

@@ -28,7 +28,7 @@ public class Day18Solution extends AbstractDayParallelSolution<List<SnailfishPai
 
     @Override
     protected List<SnailfishPair> parseInput(String rawInput) {
-        return Arrays.stream(rawInput.split("\n"))
+        return rawInput.lines()
             .map(this::parsePair)
             .toList();
     }

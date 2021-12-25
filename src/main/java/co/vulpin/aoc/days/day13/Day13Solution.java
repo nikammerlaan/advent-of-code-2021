@@ -76,11 +76,11 @@ public class Day13Solution extends AbstractDayParallelSolution<Day13Solution.Inp
     protected Input parseInput(String rawInput) {
         var parts = rawInput.split("\n\n");
 
-        var points = Arrays.stream(parts[0].split("\n"))
+        var points = parts[0].lines()
             .map(this::parsePoint)
             .toList();
 
-        var folds = Arrays.stream(parts[1].split("\n"))
+        var folds = parts[1].lines()
             .map(this::parseFold)
             .toList();
 

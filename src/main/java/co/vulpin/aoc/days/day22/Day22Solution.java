@@ -101,7 +101,7 @@ public class Day22Solution extends AbstractDayParallelSolution<List<Day22Solutio
 
     @Override
     protected List<Day22Solution.Instruction> parseInput(String rawInput) {
-        return Arrays.stream(rawInput.split("\n"))
+        return rawInput.lines()
             .map(this::parseInstruction)
             .toList();
     }

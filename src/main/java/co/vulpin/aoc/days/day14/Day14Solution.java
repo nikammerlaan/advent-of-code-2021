@@ -2,7 +2,6 @@ package co.vulpin.aoc.days.day14;
 
 import co.vulpin.aoc.days.AbstractDayParallelSolution;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,7 +81,7 @@ public class Day14Solution extends AbstractDayParallelSolution<Day14Solution.Inp
 
         var template = parts[0];
 
-        var rules = Arrays.stream(parts[1].split("\n"))
+        var rules = parts[1].lines()
             .map(this::parseRule)
             .toList();
 
