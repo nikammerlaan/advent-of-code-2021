@@ -13,7 +13,12 @@ public class Main {
     private static final String CLASS_NAME_FORMAT = "co.vulpin.aoc.days.day%02d.Day%02dSolution";
 
     public static void main(String[] args) throws Exception {
-        var dayNumber = getDayNumber();
+        int dayNumber;
+        if(args.length == 1) {
+            dayNumber = Integer.parseInt(args[0]);
+        } else {
+            dayNumber = getCurrentDayNumber();
+        }
         System.out.printf("Day %02d\n------\n\n", dayNumber);
 
         var daySolution = getDaySolution(dayNumber);
@@ -42,13 +47,8 @@ public class Main {
         return (Class<DaySolution>) Class.forName(className);
     }
 
-    private static int getDayNumber() {
-        var rawDayNumber = System.getenv("AOC_DAY");
-        if(rawDayNumber != null) {
-            return Integer.parseInt(rawDayNumber);
-        } else {
-            return ZonedDateTime.now(AOC_ZONE_ID).getDayOfMonth();
-        }
+    private static int getCurrentDayNumber() {
+        return ZonedDateTime.now(AOC_ZONE_ID).getDayOfMonth();
     }
 
 }
