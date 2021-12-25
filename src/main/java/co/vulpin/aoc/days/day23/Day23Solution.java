@@ -36,8 +36,6 @@ public class Day23Solution extends AbstractDayParallelSolution<char[][]> {
         for(int i = 5; i <= 6; i++) {
             newInput[i] = Arrays.copyOf(input[i - 2], input[i - 2].length);
         }
-        newInput[5] = Arrays.copyOf(input[3], input[3].length);
-        newInput[6] = Arrays.copyOf(input[4], input[4].length);
 
         return solve0(newInput);
     }
