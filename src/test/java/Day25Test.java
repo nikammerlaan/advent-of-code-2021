@@ -11,7 +11,7 @@ public class Day25Test extends DayTest {
 
     @Override
     protected void assertExampleResult(Result result) {
-        assertEquals(42, result.part1Result().result());
+        assertEquals(58, result.part1Result().result());
     }
 
     @Override

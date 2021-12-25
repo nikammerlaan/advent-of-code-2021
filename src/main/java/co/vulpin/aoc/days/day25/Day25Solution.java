@@ -8,7 +8,7 @@ public class Day25Solution extends AbstractDayParallelSolution<char[][]> {
 
     @Override
     protected Object solvePart1(char[][] grid) {
-        for(int i = 0; true; i++) {
+        for(int i = 1; true; i++) {
             var newGrid = iterate(grid);
 
             if(Arrays.deepEquals(grid, newGrid)) {
@@ -20,47 +20,30 @@ public class Day25Solution extends AbstractDayParallelSolution<char[][]> {
     }
 
     private char[][] iterate(char[][] grid) {
-        return iterateSouth(iterateEast(grid));
+        grid = iterate(grid, true);
+        grid = iterate(grid, false);
+        return grid;
     }
 
-    private char[][] iterateSouth(char[][] grid) {
+    private char[][] iterate(char[][] grid, boolean east) {
         var newGrid = cloneGrid(grid);
         for(int x = 0; x < grid.length; x++) {
             var row = grid[x];
             for(int y = 0; y < row.length; y++) {
                 var value = row[y];
 
-                if(value != 'v') {
+                if(value != (east ? '>' : 'v')) {
                     continue;
                 }
 
-                int nextX = (x + 1) % grid.length;
-                int nextY = y;
-
-                if(grid[nextX][nextY] == '.') {
-                    newGrid[nextX][nextY] = value;
-                    newGrid[x][y] = '.';
+                int nextX = x, nextY = y;
+                if(east) {
+                    nextY++;
+                    nextY %= grid[x].length;
                 } else {
-                    newGrid[x][y] = value;
+                    nextX++;
+                    nextX %= grid.length;
                 }
-            }
-        }
-        return newGrid;
-    }
-
-    private char[][] iterateEast(char[][] grid) {
-        var newGrid = cloneGrid(grid);
-        for(int x = 0; x < grid.length; x++) {
-            var row = grid[x];
-            for(int y = 0; y < row.length; y++) {
-                var value = row[y];
-
-                if(value != '>') {
-                    continue;
-                }
-
-                int nextX = x;
-                int nextY = (y + 1) % grid[x].length;
 
                 if(grid[nextX][nextY] == '.') {
                     newGrid[nextX][nextY] = value;
@@ -93,41 +76,5 @@ public class Day25Solution extends AbstractDayParallelSolution<char[][]> {
             .map(String::toCharArray)
             .toArray(char[][]::new);
     }
-
-    private SeaCucumber parseSeaCucumber(char c) {
-        return switch(c) {
-            case 'v' -> new SeaCucumber(SeaCucumberType.SOUTH);
-            case '>' -> new SeaCucumber(SeaCucumberType.EAST);
-            default -> null;
-        };
-    }
-
-    record Input(int x, int y, SeaCucumber[][] grid) {}
-
-    public static class SeaCucumber {
-
-        private final SeaCucumberType type;
-        private int moves;
-        
-        public SeaCucumber(SeaCucumberType type) {
-            this.type = type;
-            this.moves = 0;
-        }
-
-        public SeaCucumberType getType() {
-            return type;
-        }
-
-        public void incrementMoves() {
-            moves++;
-        }
-
-        public boolean canMove() {
-            return moves < 58;
-        }
-
-    }
-
-    private enum SeaCucumberType { EAST, SOUTH}
 
 }
