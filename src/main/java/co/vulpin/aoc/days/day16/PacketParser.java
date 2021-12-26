@@ -13,44 +13,60 @@ public class PacketParser {
     }
 
     public Packet parsePacket() {
-        var packetVersion = readInt(3);
-        var packetTypeId = readInt(3);
+        var version = readInt(3);
+        var typeId = readInt(3);
 
-        if(packetTypeId != 4) {
-            var lengthTypeId = readInt(1);
-            if(lengthTypeId == 0) {
-                var totalChildrenLength = readInt(15);
-                var endIndex = i + totalChildrenLength;
-                var children = new ArrayList<Packet>();
-                while(i < endIndex) {
-                    var child = parsePacket();
-                    children.add(child);
-                }
-                return new Packet(packetVersion, packetTypeId, children);
-            } else {
-                var childCount = readInt(11);
-                var children = new ArrayList<Packet>();
-                for(int i = 0; i < childCount; i++) {
-                    var child = parsePacket();
-                    children.add(child);
-                }
-                return new Packet(packetVersion, packetTypeId, children);
-            }
+        if(typeId == 4) {
+            return parseLiteralPacket(version, typeId);
         } else {
-            long value = 0;
-
-            while(true) {
-                var cont = readBoolean();
-                var segment = readInt(4);
-                value <<= 4;
-                value += segment;
-                if(!cont) {
-                    break;
-                }
-            }
-
-            return new Packet(packetVersion, packetTypeId, value);
+            return parseOperatorPacket(version, typeId);
         }
+    }
+
+    private Packet parseOperatorPacket(int version, int typeId) {
+        var lengthTypeId = readInt(1);
+        if(lengthTypeId == 0) {
+            return parseLengthOperatorPacket(version, typeId);
+        } else {
+            return parseCountOperatorPacket(version, typeId);
+        }
+    }
+
+    private Packet parseLengthOperatorPacket(int version, int typeId) {
+        var totalChildrenLength = readInt(15);
+        var endIndex = i + totalChildrenLength;
+        var children = new ArrayList<Packet>();
+        while(i < endIndex) {
+            var child = parsePacket();
+            children.add(child);
+        }
+        return new Packet(version, typeId, children);
+    }
+
+    private Packet parseCountOperatorPacket(int version, int typeId) {
+        var childCount = readInt(11);
+        var children = new ArrayList<Packet>();
+        for(int i = 0; i < childCount; i++) {
+            var child = parsePacket();
+            children.add(child);
+        }
+        return new Packet(version, typeId, children);
+    }
+
+    private Packet parseLiteralPacket(int version, int typeId) {
+        long value = 0;
+
+        while(true) {
+            var cont = readBoolean();
+            var segment = readInt(4);
+            value <<= 4;
+            value += segment;
+            if(!cont) {
+                break;
+            }
+        }
+
+        return new Packet(version, typeId, value);
     }
 
     private boolean readBoolean() {
