@@ -17,7 +17,7 @@ public class Day04Solution extends AbstractDayParallelSolution<String> {
 
             for(var board : input.boards()) {
                 if(board.hasWon()) {
-                    return board.getWinningValue(num.value());
+                    return board.getScore(num.value());
                 }
             }
         }
@@ -43,7 +43,7 @@ public class Day04Solution extends AbstractDayParallelSolution<String> {
             }
 
             if(newBoards.isEmpty()) {
-                return boards.get(0).getWinningValue(num.value());
+                return boards.get(0).getScore(num.value());
             }
 
             boards = newBoards;
@@ -93,7 +93,7 @@ public class Day04Solution extends AbstractDayParallelSolution<String> {
 
     record Board(Number[][] numbers) {
 
-        public int getWinningValue(int number) {
+        public int getScore(int number) {
             return number * Arrays.stream(numbers)
                 .flatMap(Arrays::stream)
                 .filter(i -> !i.marked())
