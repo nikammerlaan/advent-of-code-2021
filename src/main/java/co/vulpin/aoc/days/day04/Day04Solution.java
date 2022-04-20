@@ -58,10 +58,9 @@ public class Day04Solution extends AbstractDayParallelSolution<String> {
     }
 
     protected Input parseInput0(String input) {
-        var lines = input.lines()
-            .collect(Collectors.toCollection(LinkedList::new));
+        var blocks = input.split("\n\n");
 
-        var calledNumbers = Arrays.stream(lines.pop().split(","))
+        var calledNumbers = Arrays.stream(blocks[0].split(","))
             .map(Integer::parseInt)
             .map(Number::new)
             .toList();
@@ -69,24 +68,16 @@ public class Day04Solution extends AbstractDayParallelSolution<String> {
         var numbers = calledNumbers.stream()
             .collect(Collectors.toMap(Number::value, Function.identity()));
 
-        var boards = new LinkedList<Board>();
-        while(!lines.isEmpty()) {
-            var rawBoard = new Number[5][5];
-
-            lines.pop();
-
-            for(int i = 0; i < 5; i++) {
-                var line = lines.pop().strip();
-                var parts = line.split("\\s+");
-                for(int j = 0; j < 5; j++) {
-                    int value = Integer.parseInt(parts[j]);
-                    rawBoard[i][j] = numbers.get(value);
-                }
-            }
-
-            var board = new Board(rawBoard);
-            boards.add(board);
-        }
+        var boards = Arrays.stream(blocks, 1, blocks.length)
+            .map(rawBoard -> Arrays.stream(rawBoard.split("\n"))
+                .map(rawRow -> Arrays.stream(rawRow.strip().split("\\s+"))
+                    .map(Integer::parseInt)
+                    .map(numbers::get)
+                    .toArray(Number[]::new)
+                )
+                .toArray(Number[][]::new))
+            .map(Board::new)
+            .toList();
 
         return new Input(calledNumbers, boards);
     }
